@@ -1,0 +1,131 @@
+/* VARIABLES */
+
+:root {
+    --font-size: 16px;
+    --padding: 20px;
+}
+
+
+/* MAIN */
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+*:focus {
+    outline: 0;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    color: #eee;
+    font-family: system, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: var(--font-size);
+    -webkit-font-smoothing: antialiased;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "pnum" 1, "kern" 1, "liga" 1;
+    background: #444;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+input[type=text] {
+    width: 100%;
+    padding: calc(var(--padding) / 2) 0;
+    color: inherit;
+    font: inherit;
+    font-size: 1.6em;
+    font-weight: 200;
+    line-height: 1;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+    transition: all;
+}
+
+input[type=text]:focus {
+    border-bottom-color: rgba(255, 255, 255, .4);
+}
+
+input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, .3);
+}
+
+code {
+    white-space: pre-wrap;
+}
+
+
+/* LAYOUT */
+
+.app {
+    display: flex;
+    height: 100vh;
+    flex-direction: row;
+}
+
+.aside {
+    width: 80px;
+    padding: var(--padding);
+    background: #333;
+}
+
+.main {
+    display: flex;
+    padding: calc(var(--padding) / 2)
+             var(--padding)
+             calc(var(--padding) * 1.5);
+    flex: 1;
+    flex-direction: column;
+    background: #444;
+}
+
+.main-header {
+
+}
+
+.main-body {
+    flex: 1;
+    margin-top: var(--padding);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* CARD */
+
+.card-title {
+    word-spacing: .2em;
+}
+
+.card-title--ts {
+    color: #777;
+    font-weight: 400;
+}
+
+.card-title--pos {
+    color: #70ab59;
+}
+
+.card-translations {
+    padding-left: 1.8em;
+    font-size: .8em;
+}
+
+.card-translation-item {
+    margin-bottom: .4em;
+}
+
+.card-translation-item--mean {
+    color: #b37c60;
+}

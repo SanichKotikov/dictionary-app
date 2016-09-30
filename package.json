@@ -1,0 +1,19 @@
+{
+  "name": "dictionary",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Sanich <sancho@cdrpro.ru>",
+  "license": "MIT",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cdrpro/dictionary-app"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^1.4.1"
+  },
+  "dependencies": {}
+}
