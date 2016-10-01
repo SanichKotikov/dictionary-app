@@ -8,16 +8,23 @@
 <body>
     <!-- APP -->
     <div id="app" class="app">
-        <aside class="aside">
-
+        <aside id="aside" class="aside">
+            <button title="dictionary" data-page="dict-page">d</button>
+            <button title="favorite" data-page="favorite-page">f</button>
         </aside>
         <main class="main">
-            <div class="main-header">
-                <input id="dictionary-input" type="text" placeholder="Input Word">
+            <div id="dict-page" class="page dict-page">
+                <div class="dict-header">
+                    <input id="dictionary-input" type="text" class="dictionary-input" placeholder="Input Word">
+                    <button id="dictionary-add-button" type="button" class="add-button" disabled>+</button>
+                </div>
+                <div class="dict-body">
+                    <div id="card-wr" class="card-wr"></div>
+                </div>
             </div>
-            <div class="main-body">
-                <div id="card-wr" class="card-wr"></div>
-                <!--<code id="code"></code>-->
+            <div id="favorite-page" class="page favorite-page" hidden>
+                <h1>Favorite</h1>
+                <div id="favorite-list" class="favorite-list"></div>
             </div>
         </main>
     </div>
@@ -29,9 +36,9 @@
         </div>
     </template>
     <template id="card-title">
-        <span class="card-title--text"></span>
-        <span class="card-title--ts"></span>
-        <span class="card-title--pos"></span>
+        <span></span>
+        <span class="transcription"></span>
+        <span class="position"></span>
     </template>
     <template id="card-tr">
         <li class="card-translation-item">
@@ -39,6 +46,12 @@
             <div class="card-translation-item--mean"></div>
             <ul class="card-translation-item--ex"></ul>
         </li>
+    </template>
+    <template id="favorite-card">
+        <div class="favorite-card">
+            <div class="favorite-card-title"></div>
+            <div class="favorite-card-translations"></div>
+        </div>
     </template>
     <!-- SCRIPTS -->
     <script src="index.js"></script>

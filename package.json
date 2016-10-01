@@ -15,5 +15,7 @@
   "devDependencies": {
     "electron": "^1.4.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "electron-json-storage": "^2.0.0"
+  }
 }

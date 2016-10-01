@@ -19,7 +19,12 @@ class Card {
         const spans = el.querySelectorAll('span');
 
         spans[0].textContent = dict.text;
-        if (dict.ts) spans[1].textContent = `[${dict.ts}]`;
+
+        if (dict.ts) {
+            spans[1].textContent = `[${dict.ts}]`;
+            spans[1].dataset.text = dict.text;
+        }
+
         if (dict.pos) spans[2].textContent = dict.pos;
 
         return el;
