@@ -1,7 +1,5 @@
 'use strict';
 
-const helpers = require('./helpers');
-
 class FavoriteCard {
 
     constructor(dict) {
