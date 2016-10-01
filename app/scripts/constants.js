@@ -6,7 +6,8 @@ const constants = {
         { key: '_dictInput', id: 'dictionary-input' },
         { key: '_dictAdd', id: 'dictionary-add-button' },
         { key: '_cardWr', id: 'card-wr' },
-        { key: '_favoriteList', id: 'favorite-list' }
+        { key: '_favoriteList', id: 'favorite-list' },
+        { key: '_favoritePageCards', id: 'favorite-page-cards' }
     ],
     ENTER_KEY_CODE: 13,
     FAVORITE_STORAGE_KEY: 'favorite',

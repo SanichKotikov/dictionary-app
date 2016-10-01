@@ -71,6 +71,9 @@ class App {
         const value = this['_dictInput'].value;
         if (!value) return;
 
+        // TODO: stats os searching
+        // TODO: add by second enter
+
         const now = Date.now();
         const cache = this.favorite.get(value);
 
@@ -125,15 +128,8 @@ class App {
 
         if (target.classList.contains('favorite-card')) {
             event.stopPropagation();
-            const text = target.dataset.name;
-            const dict = this.favorite.get(text);
-
-            state.activePageId = 'dict-page';
-            this.updatePages();
-
-            this['_dictInput'].value = text;
-            this.renderCards(dict.data);
-            state.currentDict = dict;
+            const dict = this.favorite.get(target.dataset.name);
+            this.renderCards(dict.data, '_favoritePageCards');
         }
     }
 
@@ -149,8 +145,8 @@ class App {
         el.appendChild(html);
     }
 
-    renderCards(arr) {
-        App.renderList(arr, this['_cardWr'], Card);
+    renderCards(arr, into = '_cardWr') {
+        App.renderList(arr, this[into], Card);
     }
 
     renderFavorite() {

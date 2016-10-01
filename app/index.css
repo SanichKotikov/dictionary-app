@@ -3,6 +3,7 @@
 :root {
     --font-size: 16px;
     --padding: 20px;
+    --half-padding: calc(var(--padding) / 2);
     --aside-button-size: 50px;
 }
 
@@ -63,7 +64,7 @@ h1 {
 
 input[type=text] {
     width: 100%;
-    padding: calc(var(--padding) / 2) 0;
+    padding: var(--half-padding) 0;
     color: inherit;
     font: inherit;
     font-size: 1.6em;
@@ -80,7 +81,7 @@ input::-webkit-input-placeholder {
 }
 
 button {
-    padding: calc(var(--padding) / 2) var(--padding);
+    padding: var(--half-padding) var(--padding);
     border: 0;
     font: inherit;
     line-height: 1.9;
@@ -111,8 +112,8 @@ code {
 }
 
 .aside {
-    width: calc(var(--aside-button-size) + (var(--padding) * 2));
-    padding: var(--padding);
+    width: calc(var(--aside-button-size) + (var(--padding) / 1.5 * 2));
+    padding: var(--padding) calc(var(--padding) / 1.5);
     background: #333;
 }
 
@@ -124,11 +125,11 @@ code {
 }
 
 .aside button + button {
-    margin-top: calc(var(--padding) / 2);
+    margin-top: var(--half-padding);
 }
 
 .main {
-    padding: calc(var(--padding) / 2)
+    padding: var(--half-padding)
              var(--padding)
              calc(var(--padding) * 1.5);
     flex: 1;
@@ -235,21 +236,31 @@ code {
     flex-direction: column;
 }
 
-.favorite-list {
+.favorite-page-wr {
     display: flex;
+    flex-direction: row;
     flex: 1;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: flex-start;
+}
+
+.favorite-list {
+    width: 220px;
+    padding-right: var(--half-padding);
+    margin-right: var(--half-padding);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.favorite-page-cards {
+    flex: 1;
+    padding-left: var(--padding);
+    border-left: 1px solid #555;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
 .favorite-card {
-    width: calc((100% - var(--padding)) / 3);
-    padding: 0 calc(var(--padding) / 2) calc(var(--padding) / 2 + 2px);
-    margin-bottom: calc(var(--padding) / 2);
-    border-bottom: 1px solid #666;
+    margin-bottom: var(--half-padding);
+    line-height: 1.4;
 }
 
 .favorite-card-title {
