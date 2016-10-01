@@ -33,8 +33,21 @@ class Card {
         divs[0].textContent = [{ text: item.text }, ...syn]
             .map(m => m.text).join(', ');
 
+        // meanings
         if (item.mean && item.mean.length) {
             divs[1].textContent = `(${item.mean.map(m => m.text).join(', ')})`;
+        }
+
+        // examples with translation
+        const exList = item.ex;
+        const exHtmlList = [];
+
+        if (exList && exList.length) {
+            for (const ex of exList) {
+                exHtmlList.push(`<li>${ex.text} – ${ex.tr[0].text}</li>`);
+            }
+
+            li.querySelector('ul').innerHTML = exHtmlList.join('\n');
         }
 
         return li;
