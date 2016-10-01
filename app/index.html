@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <!-- APP -->
     <div id="app" class="app">
         <aside class="aside">
 
@@ -20,6 +21,25 @@
             </div>
         </main>
     </div>
+    <!-- TEMPLATES -->
+    <template id="card">
+        <div class="card">
+            <div class="card-title"></div>
+            <ol class="card-translations"></ol>
+        </div>
+    </template>
+    <template id="card-title">
+        <span class="card-title--text"></span>
+        <span class="card-title--ts"></span>
+        <span class="card-title--pos"></span>
+    </template>
+    <template id="card-tr">
+        <li class="card-translation-item">
+            <div class="card-translation-item--title"></div>
+            <div class="card-translation-item--mean"></div>
+        </li>
+    </template>
+    <!-- SCRIPTS -->
     <script src="index.js"></script>
 </body>
 </html>

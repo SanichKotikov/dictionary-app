@@ -6,54 +6,54 @@ class Card {
 
     constructor(dict) {
         this._dict = dict;
+
+        // templates
+        this._cardTpl = document.querySelector('template#card');
+        this._titleTpl = document.querySelector('template#card-title');
+        this._translateTpl = document.querySelector('template#card-tr');
     }
 
     _title() {
-        const d = this._dict;
-        const el = helpers.html('div', { class: 'card-title' });
+        const dict = this._dict;
+        const el = document.importNode(this._titleTpl.content, true);
+        const spans = el.querySelectorAll('span');
 
-        el.appendChild(helpers.html('span', { class: 'card-title--text' }, `${d.text} `));
-        if (d.ts) el.appendChild(helpers.html('span', { class: 'card-title--ts' }, `[${d.ts}] `));
-        if (d.pos) el.appendChild(helpers.html('span', { class: 'card-title--pos' }, d.pos));
+        spans[0].textContent = dict.text;
+        if (dict.ts) spans[1].textContent = `[${dict.ts}]`;
+        if (dict.pos) spans[2].textContent = dict.pos;
 
         return el;
     }
 
-    static trItem(item) {
-        const li = helpers.html('li', { class: 'card-translation-item' });
+    _trItem(item) {
+        const li = document.importNode(this._translateTpl.content, true);
+        const divs = li.querySelectorAll('div');
         const syn = item.syn || [];
 
-        const title = helpers.html('div', { class: 'card-translation-item--title' });
-        title.textContent = [{ text: item.text }, ...syn].map(m => m.text).join(', ');
-        li.appendChild(title);
+        divs[0].textContent = [{ text: item.text }, ...syn]
+            .map(m => m.text).join(', ');
 
         if (item.mean && item.mean.length) {
-            const mean = helpers.html('div', { class: 'card-translation-item--mean' });
-            mean.textContent = `(${item.mean.map(m => m.text).join(', ')})`;
-            li.appendChild(mean);
+            divs[1].textContent = `(${item.mean.map(m => m.text).join(', ')})`;
         }
 
         return li;
     }
 
-    _trList() {
-        const d = this._dict;
-        const el = helpers.html('ol', { class: 'card-translations' });
+    html() {
+        const html = document.importNode(this._cardTpl.content, true);
+        const title = html.querySelector('.card-title');
 
-        if (d.tr && d.tr.length) {
-            for (const item of d.tr) {
-                el.appendChild(Card.trItem(item));
+        title.appendChild(this._title());
+
+        const translations = html.querySelector('.card-translations');
+        const trList = this._dict.tr;
+
+        if (trList && trList.length) {
+            for (const item of trList) {
+                translations.appendChild(this._trItem(item));
             }
         }
-
-        return el;
-    }
-
-    html() {
-        const html = helpers.html('div', { class: 'card' });
-
-        html.appendChild(this._title());
-        html.appendChild(this._trList());
 
         return html;
     }
