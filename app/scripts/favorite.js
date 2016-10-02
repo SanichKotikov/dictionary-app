@@ -67,8 +67,12 @@ class Favorite {
         return !!(this.get(text));
     }
 
-    list() {
-        return this._list;
+    getSortedCopyOfList() {
+        return [...this._list].sort((a, b) => {
+            if (a.text < b.text) return -1;
+            if (a.text > b.text) return 1;
+            return 0;
+        });
     }
 }
 

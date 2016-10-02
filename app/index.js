@@ -10,6 +10,7 @@ const YaDictionary = require('./api/ya.dictionary');
 const Card = require('./scripts/card');
 const Favorite = require('./scripts/favorite');
 const FavoriteCard = require('./scripts/favorite-card');
+const helpers = require('./scripts/helpers');
 
 class App {
 
@@ -34,6 +35,8 @@ class App {
 
     bindEvents() {
         this['_asideEl'].addEventListener('click', event => this.onAsideClick(event));
+        this['_dictInput'].addEventListener('input', event => this.onDictInputChange(event));
+        this['_dictInputHints'].addEventListener('click', event => this.onDictHintClick(event));
         this['_dictAdd'].addEventListener('click', event => this.onDictAddClick(event));
         this['_cardWr'].addEventListener('click', event => this.onCardWrClick(event));
         this['_favoriteList'].addEventListener('click', event => this.onFavoriteListClick(event));
@@ -65,6 +68,47 @@ class App {
             if (state.activePageId === 'favorite-page') {
                 this.renderFavorite();
             }
+        }
+    }
+
+    onDictInputChange() {
+        clearTimeout(state.searchTimer);
+
+        state.searchTimer = setTimeout(() => {
+            const value = this['_dictInput'].value;
+
+            if (value.length < constants.MIN_SEARCH_HINT_LENGTH) {
+                this['_dictInputHints'].hidden = true;
+            } else {
+                const found = this.favorite.getSortedCopyOfList()
+                    .filter(item => item.text.substr(0, value.length) === value);
+
+                if (!found.length) return;
+                const html = document.createDocumentFragment();
+
+                for (const item of found) {
+                    const props = {
+                        class: constants.DICT_HINT_ITEM_CLASS,
+                        'data-text': item.text
+                    };
+                    html.appendChild(helpers.html('div', props, item.text));
+                }
+
+                this['_dictInputHints'].innerHTML = '';
+                this['_dictInputHints'].appendChild(html);
+                this['_dictInputHints'].hidden = false;
+            }
+        }, 0);
+    }
+
+    onDictHintClick(event) {
+        const target = event.target;
+
+        if (target.classList.contains(constants.DICT_HINT_ITEM_CLASS)) {
+            event.stopPropagation();
+            this['_dictInput'].value = target.dataset.text;
+            this['_dictInputHints'].hidden = true;
+            this.onDictInputClick();
         }
     }
 
@@ -151,13 +195,7 @@ class App {
     }
 
     renderFavorite() {
-        const list = [...this.favorite.list()].sort((a, b) => {
-            if (a.text < b.text) return -1;
-            if (a.text > b.text) return 1;
-            return 0;
-        });
-
-        App.renderList(list, this['_favoriteList'], FavoriteCard);
+        App.renderList(this.favorite.getSortedCopyOfList(), this['_favoriteList'], FavoriteCard);
     }
 }
 

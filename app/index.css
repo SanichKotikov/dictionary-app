@@ -175,9 +175,27 @@ code {
 
 /* DICT HEADER */
 
-.dictionary-input {
+.dictionary-input-wr {
+    position: relative;
     flex: 1;
     margin-right: 10px;
+}
+
+.dictionary-input-hints {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    width: 100%;
+    padding-top: 6px;
+    padding-bottom: var(--half-padding);
+    line-height: 1;
+    background: #555;
+    border-bottom: 2px solid #333;
+}
+
+.dictionary-input-hint-item {
+    padding: var(--half-padding) calc(var(--half-padding) + 6px);
+    cursor: default;
 }
 
 .add-button {
