@@ -37,6 +37,7 @@ class App {
         this['_dictAdd'].addEventListener('click', event => this.onDictAddClick(event));
         this['_cardWr'].addEventListener('click', event => this.onCardWrClick(event));
         this['_favoriteList'].addEventListener('click', event => this.onFavoriteListClick(event));
+        this['_favoritePageCards'].addEventListener('click', event => this.onCardWrClick(event));
 
         this['_dictInput'].addEventListener('keyup', event => {
             event.stopPropagation();
