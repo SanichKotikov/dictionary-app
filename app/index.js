@@ -83,7 +83,11 @@ class App {
                 const found = this.favorite.getSortedCopyOfList()
                     .filter(item => item.text.substr(0, value.length) === value);
 
-                if (!found.length) return;
+                if (!found.length) {
+                    this['_dictInputHints'].hidden = true;
+                    return;
+                }
+
                 const html = document.createDocumentFragment();
 
                 for (const item of found) {
