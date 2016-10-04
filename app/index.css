@@ -136,6 +136,12 @@ code {
     background: #444;
 }
 
+.page {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
 
 /* OTHER */
 
@@ -154,18 +160,12 @@ code {
 
 /* DICT PAGE */
 
-.dict-page {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-}
-
 .dict-header {
     display: flex;
     align-items: flex-end;
 }
 
-.dict-body {
+.dict-sheet {
     flex: 1;
     margin-top: var(--padding);
     overflow-x: hidden;
@@ -247,12 +247,6 @@ code {
 
 
 /* FAVORITE PAGE */
-
-.favorite-page {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-}
 
 .favorite-page-wr {
     display: flex;
