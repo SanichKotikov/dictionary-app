@@ -1,16 +1,18 @@
 'use strict';
 
+// node modules
+const jsonStorage = require('electron-json-storage');
+
 class Favorite {
 
-    constructor(storage, storageKey) {
-        this._storage = storage;
+    constructor(storageKey) {
         this._key = storageKey;
         this._list = [];
 
         this.exist().then(res => {
             if (!res) return;
 
-            this._storage.get(this._key, (error, data) => {
+            jsonStorage.get(this._key, (error, data) => {
                 if (error) throw error;
 
                 if (Array.isArray(data) && data.length) {
@@ -23,7 +25,7 @@ class Favorite {
 
     exist() {
         return new Promise(resolve => {
-            this._storage.has(this._key, (error, hasKey) => {
+            jsonStorage.has(this._key, (error, hasKey) => {
                 if (error) throw error;
                 resolve(hasKey);
             });
@@ -32,7 +34,7 @@ class Favorite {
 
     save() {
         return new Promise(resolve => {
-            this._storage.set(this._key, this._list, error => {
+            jsonStorage.set(this._key, this._list, error => {
                 if (error) throw error;
                 resolve();
             });
