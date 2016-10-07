@@ -10,12 +10,15 @@
     "url": "https://github.com/cdrpro/dictionary-app"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager ./ --platform=darwin --arch=x64 --icon=./images/icon.icns --out=build --overwrite"
   },
   "devDependencies": {
-    "electron": "^1.4.1"
+    "electron": "^1.4.3",
+    "electron-packager": "^8.1.0"
   },
   "dependencies": {
-    "electron-json-storage": "^2.0.0"
+    "electron-json-storage": "^2.0.0",
+    "node-notifier": "^4.6.1"
   }
 }

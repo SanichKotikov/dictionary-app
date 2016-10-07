@@ -1,42 +1,117 @@
 'use strict';
 
-const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const {
+    app,
+    BrowserWindow,
+    Menu,
+    Tray,
+} = require('electron');
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+const path = require('path');
+const NotificationCenter = require('node-notifier/notifiers/notificationcenter');
 
-function createWindow () {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        resizable: false
-    });
+const constants = require('./app/scripts/constants');
+const helpers = require('./app/scripts/helpers');
+const FavoriteStorage = require('./app/scripts/favorite');
 
-    // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/app/index.html`);
+/**
+ * Application
+ */
+class App {
 
-    // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    constructor() {
+        this.win = null;
+        this.tray = null;
+        this.nc = null;
 
-    // Emitted when the window is closed.
-    mainWindow.on('closed', () => {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null
-    })
+        this.createWindow();
+        this.createTray();
+
+        this.favStorage = new FavoriteStorage(constants.FAVORITE_STORAGE_KEY);
+        this.runNotifying();
+    }
+
+    createWindow() {
+        if (this.win !== null) return;
+
+        const win = new BrowserWindow({
+            width: 800,
+            height: 600,
+            resizable: false,
+            show: false,
+        });
+
+        win.loadURL(`file://${__dirname}/app/index.html`);
+        // win.webContents.openDevTools();
+        win.once('ready-to-show', () => this.win.show());
+        win.on('closed', () => this.win = null);
+
+        this.win = win;
+    }
+
+    createTray() {
+        const iconIdle = path.join(__dirname, 'images', 'tray.png');
+        this.tray = new Tray(iconIdle);
+
+        const contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Show Window',
+                click: () => this.createWindow()
+            },
+            {
+                label: 'Quit',
+                click: () => app.quit()
+            }
+        ]);
+
+        this.tray.setContextMenu(contextMenu);
+    }
+
+    // for testing...
+
+    onNotifyClick(options) {
+        const winIsNull = this.win === null;
+        const dict = this.favStorage.get(options.title);
+
+        if (!dict) return;
+
+        this.createWindow();
+        const content = this.win.webContents;
+        const sendFn = () => content.send(constants.SHOW_DICT_EVENT, dict);
+
+        console.log('winIsNull: ', winIsNull);
+
+        if (winIsNull) {
+            content.on('did-finish-load', () => sendFn());
+        } else {
+            sendFn();
+        }
+    }
+
+    runNotifying() {
+        const favStorage = new FavoriteStorage(constants.FAVORITE_STORAGE_KEY);
+
+        this.nc = new NotificationCenter({ withFallback: false });
+        this.nc.on('click', (notifierObject, options) => this.onNotifyClick(options));
+
+        setInterval(() => {
+            favStorage.read().then(() => {
+                const list = favStorage.list();
+                const index = helpers.getRandom(0, list.length);
+                const dict = list[index];
+
+                this.nc.notify({
+                    title: dict.text,
+                    subtitle: `[${dict.data[0].ts}]`,
+                    message: dict.data.map(item => item.tr[0].text).join(', '),
+                    // icon: path.join(__dirname, 'images', 'icon.png'),
+                    sound: 'Glass',
+                    wait: true,
+                });
+            });
+        }, constants.TIME_HOUR / 2);
+    }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
-
-// Quit when all windows are closed.
-app.on('window-all-closed', () => app.quit());
+app.on('ready', () => new App());
+app.on('window-all-closed', () => { /* Do nothing */ });

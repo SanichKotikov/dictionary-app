@@ -1,5 +1,7 @@
 'use strict';
 
+const { ipcRenderer } = require('electron');
+
 // app modules
 const constants = require('./scripts/constants');
 const storage = require('./scripts/storage');
@@ -60,7 +62,16 @@ class App {
     }
 
     bindHandlers() {
+        // Catch events from main process
+        ipcRenderer.on(constants.SHOW_DICT_EVENT, (event, dict) => this.showDict(dict));
+
         this._aSide.addEventListener('click', event => this.onAsideClick(event));
+    }
+
+    showDict(dict) {
+        console.log('showDict');
+        storage.currentDict = dict;
+        this.showPage(PAGES[0]); // TODO:
     }
 
     showPage(page) {

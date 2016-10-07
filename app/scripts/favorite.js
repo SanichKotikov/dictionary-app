@@ -11,15 +11,7 @@ class Favorite {
 
         this.exist().then(res => {
             if (!res) return;
-
-            jsonStorage.get(this._key, (error, data) => {
-                if (error) throw error;
-
-                if (Array.isArray(data) && data.length) {
-                    console.log(data.length);
-                    this._list = data;
-                }
-            });
+            this.read();
         });
     }
 
@@ -28,6 +20,17 @@ class Favorite {
             jsonStorage.has(this._key, (error, hasKey) => {
                 if (error) throw error;
                 resolve(hasKey);
+            });
+        });
+    }
+
+    read() {
+        return new Promise(resolve => {
+            jsonStorage.get(this._key, (error, data) => {
+                if (error) throw error;
+                this._list = (Array.isArray(data) && data.length) ? data : [];
+                console.log(this._list.length);
+                resolve();
             });
         });
     }
@@ -67,6 +70,10 @@ class Favorite {
 
     has(text) {
         return !!(this.get(text));
+    }
+
+    list() {
+        return [...this._list];
     }
 
     getSortedCopyOfList() {

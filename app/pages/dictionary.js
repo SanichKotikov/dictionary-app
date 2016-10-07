@@ -22,7 +22,8 @@ class DictPage extends Page {
         super(templateId, TARGETS);
 
         if (storage.currentDict) {
-
+            this[TARGETS.input].value = storage.currentDict.text;
+            this.renderSheet(storage.currentDict.data);
         }
 
         this.bindHandlers();

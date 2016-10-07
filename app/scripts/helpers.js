@@ -24,6 +24,10 @@ const helpers = {
         if (text) el.textContent = text;
 
         return el;
+    },
+
+    getRandom(min, max) {
+        return parseInt(Math.random() * (max - min) + min, 10);
     }
 };
 
