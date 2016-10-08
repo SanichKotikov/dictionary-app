@@ -1,6 +1,6 @@
 'use strict';
 
-const { ipcRenderer } = require('electron');
+const { remote } = require('electron');
 
 // app modules
 const constants = require('./scripts/constants');
@@ -9,6 +9,7 @@ const helpers = require('./scripts/helpers');
 
 const YaDictionary = require('./api/ya.dictionary');
 const Favorite = require('./scripts/favorite');
+const Notifications = require('./scripts/notifications');
 
 const DictPage = require('./pages/dictionary');
 const FavoritePage = require('./pages/favorite');
@@ -29,6 +30,8 @@ const PAGES = [
 class App {
 
     constructor(appId) {
+        this._win = remote.getCurrentWindow();
+
         // dom
         this._appEl = document.getElementById(appId || 'app');
         this._aSide = this._appEl.querySelector('#aside');
@@ -37,6 +40,7 @@ class App {
         // storage
         storage.dictionary = new YaDictionary();
         storage.favorite = new Favorite(constants.FAVORITE_STORAGE_KEY); // TODO: where store ID?
+        storage.notifications = new Notifications(this.showDict.bind(this));
 
         this.renderPagesButtons();
         this.bindHandlers();
@@ -62,9 +66,6 @@ class App {
     }
 
     bindHandlers() {
-        // Catch events from main process
-        ipcRenderer.on(constants.SHOW_DICT_EVENT, (event, dict) => this.showDict(dict));
-
         this._aSide.addEventListener('click', event => this.onAsideClick(event));
     }
 
@@ -72,6 +73,10 @@ class App {
         console.log('showDict');
         storage.currentDict = dict;
         this.showPage(PAGES[0]); // TODO:
+
+        if (!this._win.isVisible()) {
+            this._win.show();
+        }
     }
 
     showPage(page) {

@@ -3,7 +3,8 @@
 const storage = {
     currentDict: null,
     dictionary: null,
-    favorite: null
+    favorite: null,
+    notifications: null,
 };
 
 module.exports = storage;

@@ -25,4 +25,12 @@ $ npm i
 # run
 $ npm start
 ```
+
+## Build
+
+Darwin x64 only (temporarily)
+
+```bash
+$ npm run build
+```
     
