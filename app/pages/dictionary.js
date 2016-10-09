@@ -1,8 +1,8 @@
 'use strict';
 
 const Page = require('./page');
+const Card = require('../components/card');
 const Sheet = require('../components/sheet');
-const FavoriteCard = require('../components/favorite-card');
 
 const constants = require('../scripts/constants');
 const storage = require('../scripts/storage');
@@ -24,16 +24,16 @@ class DictPage extends Page {
         super(templateId, TARGETS);
 
         if (storage.currentDict) {
-            this.setDict(storage.currentDict);
+            this.setDict();
         }
 
         this.bindHandlers();
         this.renderHistory();
     }
 
-    setDict(dict) {
-        this[TARGETS.input].value = dict.text;
-        this.renderSheet(dict.data);
+    setDict() {
+        this[TARGETS.input].value = storage.currentDict.text;
+        this.renderSheet(storage.currentDict.data);
     }
 
     bindHandlers() {
@@ -146,11 +146,11 @@ class DictPage extends Page {
     onHistoryClick(event) {
         const target = event.target;
 
-        if (target.classList.contains('favorite-card')) {
+        if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
             event.stopPropagation();
 
-            const dict = storage.historyStorage.get(target.dataset.name);
-            this.setDict(dict);
+            storage.currentDict = storage.historyStorage.get(target.dataset.name);
+            this.setDict();
         }
     }
 
@@ -174,7 +174,7 @@ class DictPage extends Page {
             this[TARGETS.history].innerHTML = '';
 
             for (const item of list) {
-                html.appendChild((new FavoriteCard(item)).html());
+                html.appendChild((new Card(item, true)).html());
             }
 
             this[TARGETS.history].appendChild(html);

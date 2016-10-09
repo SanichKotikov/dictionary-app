@@ -292,16 +292,16 @@ code {
     overflow-y: scroll;
 }
 
-.favorite-card {
+.teaser-card {
     margin-bottom: var(--half-padding);
     line-height: 1.4;
 }
 
-.favorite-card-title {
+.teaser-card-title {
     pointer-events: none;
 }
 
-.favorite-card-translations {
+.teaser-card-translations {
     color: #999;
     font-size: .8em;
     white-space: nowrap;
