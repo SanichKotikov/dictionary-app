@@ -50,7 +50,7 @@ class DictPage extends Page {
         if (!value.length) {
             this[TARGETS.hints].hidden = true;
         } else {
-            const found = storage.favorite.getSortedCopyOfList()
+            const found = storage.historyStorage.getSortedCopyOfList()
                 .filter(f => f.text.substr(0, value.length) === value);
 
             if (!found.length) {
@@ -96,7 +96,7 @@ class DictPage extends Page {
         // TODO: add by second enter
 
         const now = Date.now();
-        const cache = storage.favorite.get(value);
+        const cache = storage.historyStorage.get(value);
 
         // TODO: remove
         if (cache) {
@@ -119,16 +119,16 @@ class DictPage extends Page {
             if (!cache) {
                 this[TARGETS.addButton].disabled = false;
             } else {
-                storage.favorite.update(storage.currentDict);
+                storage.historyStorage.update(storage.currentDict);
             }
         });
     }
 
     onAddClick(event) {
-        if (storage.favorite.has(storage.currentDict.text)) return;
+        if (storage.historyStorage.has(storage.currentDict.text)) return;
         event.stopPropagation();
 
-        storage.favorite.add(storage.currentDict).then(list => {
+        storage.historyStorage.add(storage.currentDict).then(list => {
             this[TARGETS.addButton].disabled = true;
             console.log(list.length);
         });

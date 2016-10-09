@@ -8,7 +8,7 @@ const storage = require('./scripts/storage');
 const helpers = require('./scripts/helpers');
 
 const YaDictionary = require('./api/ya.dictionary');
-const Favorite = require('./scripts/favorite');
+const HistoryStorage = require('./scripts/history-storage');
 const Notifications = require('./scripts/notifications');
 
 const DictPage = require('./pages/dictionary');
@@ -39,7 +39,7 @@ class App {
 
         // storage
         storage.dictionary = new YaDictionary();
-        storage.favorite = new Favorite(constants.FAVORITE_STORAGE_KEY); // TODO: where store ID?
+        storage.historyStorage = new HistoryStorage(constants.HISTORY_STORAGE_KEY);
         storage.notifications = new Notifications(this.showDict.bind(this));
 
         this.renderPagesButtons();

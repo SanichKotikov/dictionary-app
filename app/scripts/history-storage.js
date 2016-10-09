@@ -3,7 +3,7 @@
 // node modules
 const jsonStorage = require('electron-json-storage');
 
-class Favorite {
+class HistoryStorage {
 
     constructor(storageKey) {
         this._key = storageKey;
@@ -85,4 +85,4 @@ class Favorite {
     }
 }
 
-module.exports = Favorite;
+module.exports = HistoryStorage;
