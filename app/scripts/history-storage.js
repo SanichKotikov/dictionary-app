@@ -50,7 +50,7 @@ class HistoryStorage {
 
             // TODO: optimise dict.data before
             this._list.push(dict);
-            this.save().then(() => resolve(this._list));
+            this.save().then(() => resolve([...this._list]));
         });
     }
 

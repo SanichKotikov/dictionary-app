@@ -12,7 +12,7 @@ const HistoryStorage = require('./scripts/history-storage');
 const Notifications = require('./scripts/notifications');
 
 const DictPage = require('./pages/dictionary');
-const FavoritePage = require('./pages/favorite');
+// const FavoritePage = require('./pages/favorite');
 
 const PAGES = [
     {
@@ -20,11 +20,11 @@ const PAGES = [
         title: 'dictionary',
         class: DictPage
     },
-    {
-        tplId: 'favorite-page',
-        title: 'favorite',
-        class: FavoritePage
-    }
+    // {
+    //     tplId: 'favorite-page',
+    //     title: 'favorite',
+    //     class: FavoritePage
+    // }
 ];
 
 class App {

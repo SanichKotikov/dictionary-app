@@ -2,6 +2,7 @@
 
 const Page = require('./page');
 const Sheet = require('../components/sheet');
+const FavoriteCard = require('../components/favorite-card');
 
 const constants = require('../scripts/constants');
 const storage = require('../scripts/storage');
@@ -11,7 +12,8 @@ const TARGETS = {
     input: 'dict-input',
     hints: 'dict-hints',
     addButton: 'dict-add-button',
-    sheet: 'dict-sheet'
+    sheet: 'dict-sheet',
+    history: 'dict-history',
 };
 
 const HINT_ITEM_CLASS = 'dictionary-input-hint-item';
@@ -22,17 +24,23 @@ class DictPage extends Page {
         super(templateId, TARGETS);
 
         if (storage.currentDict) {
-            this[TARGETS.input].value = storage.currentDict.text;
-            this.renderSheet(storage.currentDict.data);
+            this.setDict(storage.currentDict);
         }
 
         this.bindHandlers();
+        this.renderHistory();
+    }
+
+    setDict(dict) {
+        this[TARGETS.input].value = dict.text;
+        this.renderSheet(dict.data);
     }
 
     bindHandlers() {
         this[TARGETS.input].addEventListener('input', event => this.onInputChange(event));
         this[TARGETS.hints].addEventListener('click', event => this.onHintClick(event));
         this[TARGETS.addButton].addEventListener('click', event => this.onAddClick(event));
+        this[TARGETS.history].addEventListener('click', event => this.onHistoryClick(event));
 
         this[TARGETS.input].addEventListener('keyup', event => {
             event.stopPropagation();
@@ -130,8 +138,20 @@ class DictPage extends Page {
 
         storage.historyStorage.add(storage.currentDict).then(list => {
             this[TARGETS.addButton].disabled = true;
+            this.renderHistory(list);
             console.log(list.length);
         });
+    }
+
+    onHistoryClick(event) {
+        const target = event.target;
+
+        if (target.classList.contains('favorite-card')) {
+            event.stopPropagation();
+
+            const dict = storage.historyStorage.get(target.dataset.name);
+            this.setDict(dict);
+        }
     }
 
     renderSheet(cards) {
@@ -139,6 +159,26 @@ class DictPage extends Page {
 
         this[TARGETS.sheet].innerHTML = '';
         setTimeout(() => this[TARGETS.sheet].appendChild(sheet.html), 30);
+    }
+
+    renderHistory(list = null) {
+        const promise = (list !== null)
+            ? new Promise(resolve => resolve(list))
+            : storage.historyStorage.read();
+
+        promise.then(() => {
+            const html = document.createDocumentFragment();
+            const list = storage.historyStorage.list();
+            list.reverse();
+
+            this[TARGETS.history].innerHTML = '';
+
+            for (const item of list) {
+                html.appendChild((new FavoriteCard(item)).html());
+            }
+
+            this[TARGETS.history].appendChild(html);
+        });
     }
 }
 

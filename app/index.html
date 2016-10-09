@@ -24,17 +24,24 @@
 
     <!-- dictionary page -->
     <template id="dict-page">
-        <div class="dict-header">
-            <div class="dictionary-input-wr">
-                <input id="dict-input" type="text" placeholder="Input Word">
-                <div id="dict-hints" class="dictionary-input-hints" hidden>
+        <div class="dict-page">
+            <div class="dict-dict">
+                <div class="dict-header">
+                    <div class="dictionary-input-wr">
+                        <input id="dict-input" type="text" placeholder="Input Word">
+                        <div id="dict-hints" class="dictionary-input-hints" hidden>
+                            <!-- content -->
+                        </div>
+                    </div>
+                    <button id="dict-add-button" class="add-button" disabled>+</button>
+                </div>
+                <div id="dict-sheet" class="dict-sheet">
                     <!-- content -->
                 </div>
             </div>
-            <button id="dict-add-button" class="add-button" disabled>+</button>
-        </div>
-        <div id="dict-sheet" class="dict-sheet">
-            <!-- content -->
+            <div id="dict-history" class="dict-history">
+                <!-- content -->
+            </div>
         </div>
     </template>
 
