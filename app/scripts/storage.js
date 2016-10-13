@@ -4,7 +4,7 @@ const storage = {
     currentDict: null,
     dictionary: null,
     favorite: null,
-    historyStorage: null,
+    history: null,
     notifications: null,
 };
 

@@ -15,7 +15,7 @@ class FavoritePage extends Page {
 
     constructor(templateId) {
         super(templateId, TARGETS);
-        const list = storage.historyStorage.getSortedCopyOfList();
+        const list = storage.history.getSortedCopyOfList();
 
         for (const item of list) {
             this[TARGETS.list].appendChild((new FavoriteCard(item)).html());
@@ -34,7 +34,7 @@ class FavoritePage extends Page {
         if (target.classList.contains('favorite-card')) {
             event.stopPropagation();
 
-            const dict = storage.historyStorage.get(target.dataset.name);
+            const dict = storage.history.get(target.dataset.name);
             const sheet = new Sheet(dict.data);
 
             this[TARGETS.sheet].innerHTML = '';

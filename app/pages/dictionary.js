@@ -58,7 +58,7 @@ class DictPage extends Page {
         if (!value.length) {
             this[TARGETS.hints].hidden = true;
         } else {
-            const found = storage.historyStorage.getSortedCopyOfList()
+            const found = storage.history.getSortedCopyOfList()
                 .filter(f => f.text.substr(0, value.length) === value);
 
             if (!found.length) {
@@ -103,7 +103,7 @@ class DictPage extends Page {
         // TODO: stats os searching
 
         const now = Date.now();
-        const cache = storage.historyStorage.get(value);
+        const cache = storage.history.get(value);
 
         if (cache && (now - cache.timestamp) < constants.TIME_DAY) {
             storage.currentDict = cache;
@@ -119,12 +119,12 @@ class DictPage extends Page {
             this.renderSheet(data);
 
             if (!cache && data.length) {
-                storage.historyStorage.add(dict).then(list => {
+                storage.history.add(dict).then(list => {
                     this.renderHistory(list);
                     console.log(list.length);
                 });
             } else {
-                storage.historyStorage.update(storage.currentDict);
+                storage.history.update(storage.currentDict);
             }
         });
     }
@@ -146,7 +146,7 @@ class DictPage extends Page {
         if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
             event.stopPropagation();
 
-            storage.currentDict = storage.historyStorage.get(target.dataset.name);
+            storage.currentDict = storage.history.get(target.dataset.name);
             this.setDict();
         }
     }
@@ -161,11 +161,11 @@ class DictPage extends Page {
     renderHistory(list = null) {
         const promise = (list !== null)
             ? new Promise(resolve => resolve(list))
-            : storage.historyStorage.read();
+            : storage.history.read();
 
         promise.then(() => {
             const html = document.createDocumentFragment();
-            const list = storage.historyStorage.list();
+            const list = storage.history.list();
             list.reverse();
 
             this[TARGETS.history].innerHTML = '';

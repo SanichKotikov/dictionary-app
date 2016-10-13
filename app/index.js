@@ -39,7 +39,7 @@ class App {
 
         // storage
         storage.dictionary = new YaDictionary();
-        storage.historyStorage = new HistoryStorage(constants.HISTORY_STORAGE_KEY);
+        storage.history = new HistoryStorage(constants.HISTORY_STORAGE_KEY);
         storage.notifications = new Notifications(this.showDict.bind(this));
 
         this.renderPagesButtons();
