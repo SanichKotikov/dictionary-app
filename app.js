@@ -32,7 +32,9 @@ class App {
         this.win.loadURL(`file://${__dirname}/app/index.html`);
         this.win.once('ready-to-show', () => this.win.show());
 
-        // this.win.webContents.openDevTools();
+        if (process.defaultApp) {
+            this.win.webContents.openDevTools();
+        }
 
         this.win.on('close', event => {
             if (this.win.forceClose) return;
