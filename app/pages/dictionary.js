@@ -1,6 +1,7 @@
 'use strict';
 
 const Page = require('./page');
+const Card = require('../components/card');
 const Sheet = require('../components/sheet');
 
 const constants = require('../scripts/constants');
@@ -11,7 +12,8 @@ const TARGETS = {
     input: 'dict-input',
     hints: 'dict-hints',
     addButton: 'dict-add-button',
-    sheet: 'dict-sheet'
+    sheet: 'dict-sheet',
+    history: 'dict-history',
 };
 
 const HINT_ITEM_CLASS = 'dictionary-input-hint-item';
@@ -22,17 +24,23 @@ class DictPage extends Page {
         super(templateId, TARGETS);
 
         if (storage.currentDict) {
-            this[TARGETS.input].value = storage.currentDict.text;
-            this.renderSheet(storage.currentDict.data);
+            this.setDict();
         }
 
         this.bindHandlers();
+        this.renderHistory();
+    }
+
+    setDict() {
+        this[TARGETS.input].value = storage.currentDict.text;
+        this.renderSheet(storage.currentDict.data);
     }
 
     bindHandlers() {
         this[TARGETS.input].addEventListener('input', event => this.onInputChange(event));
         this[TARGETS.hints].addEventListener('click', event => this.onHintClick(event));
         this[TARGETS.addButton].addEventListener('click', event => this.onAddClick(event));
+        this[TARGETS.history].addEventListener('click', event => this.onHistoryClick(event));
 
         this[TARGETS.input].addEventListener('keyup', event => {
             event.stopPropagation();
@@ -50,7 +58,7 @@ class DictPage extends Page {
         if (!value.length) {
             this[TARGETS.hints].hidden = true;
         } else {
-            const found = storage.favorite.getSortedCopyOfList()
+            const found = storage.history.getSortedCopyOfList()
                 .filter(f => f.text.substr(0, value.length) === value);
 
             if (!found.length) {
@@ -93,16 +101,9 @@ class DictPage extends Page {
         if (!value) return;
 
         // TODO: stats os searching
-        // TODO: add by second enter
 
         const now = Date.now();
-        const cache = storage.favorite.get(value);
-
-        // TODO: remove
-        if (cache) {
-            console.log('diff: ', (now - cache.timestamp));
-            console.log('TIME_DAY: ', constants.TIME_DAY);
-        }
+        const cache = storage.history.get(value);
 
         if (cache && (now - cache.timestamp) < constants.TIME_DAY) {
             storage.currentDict = cache;
@@ -112,26 +113,42 @@ class DictPage extends Page {
 
         storage.dictionary.get(value).then(json => {
             const data = json.def || [];
-            storage.currentDict = { text: value, data: data, timestamp: now };
+            const dict = { text: value, data: data, timestamp: now };
 
+            storage.currentDict = dict;
             this.renderSheet(data);
 
-            if (!cache) {
-                this[TARGETS.addButton].disabled = false;
+            if (!cache && data.length) {
+                storage.history.add(dict).then(list => {
+                    this.renderHistory(list);
+                    console.log(list.length);
+                });
             } else {
-                storage.favorite.update(storage.currentDict);
+                storage.history.update(storage.currentDict);
             }
         });
     }
 
     onAddClick(event) {
-        if (storage.favorite.has(storage.currentDict.text)) return;
-        event.stopPropagation();
+        // if (storage.historyStorage.has(storage.currentDict.text)) return;
+        // event.stopPropagation();
+        //
+        // storage.historyStorage.add(storage.currentDict).then(list => {
+        //     this[TARGETS.addButton].disabled = true;
+        //     this.renderHistory(list);
+        //     console.log(list.length);
+        // });
+    }
 
-        storage.favorite.add(storage.currentDict).then(list => {
-            this[TARGETS.addButton].disabled = true;
-            console.log(list.length);
-        });
+    onHistoryClick(event) {
+        const target = event.target;
+
+        if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
+            event.stopPropagation();
+
+            storage.currentDict = storage.history.get(target.dataset.name);
+            this.setDict();
+        }
     }
 
     renderSheet(cards) {
@@ -139,6 +156,26 @@ class DictPage extends Page {
 
         this[TARGETS.sheet].innerHTML = '';
         setTimeout(() => this[TARGETS.sheet].appendChild(sheet.html), 30);
+    }
+
+    renderHistory(list = null) {
+        const promise = (list !== null)
+            ? new Promise(resolve => resolve(list))
+            : storage.history.read();
+
+        promise.then(() => {
+            const html = document.createDocumentFragment();
+            const list = storage.history.list();
+            list.reverse();
+
+            this[TARGETS.history].innerHTML = '';
+
+            for (const item of list) {
+                html.appendChild((new Card(item, true)).html());
+            }
+
+            this[TARGETS.history].appendChild(html);
+        });
     }
 }
 

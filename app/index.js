@@ -8,11 +8,11 @@ const storage = require('./scripts/storage');
 const helpers = require('./scripts/helpers');
 
 const YaDictionary = require('./api/ya.dictionary');
-const Favorite = require('./scripts/favorite');
+const HistoryStorage = require('./scripts/history-storage');
 const Notifications = require('./scripts/notifications');
 
 const DictPage = require('./pages/dictionary');
-const FavoritePage = require('./pages/favorite');
+// const FavoritePage = require('./pages/favorite');
 
 const PAGES = [
     {
@@ -20,11 +20,11 @@ const PAGES = [
         title: 'dictionary',
         class: DictPage
     },
-    {
-        tplId: 'favorite-page',
-        title: 'favorite',
-        class: FavoritePage
-    }
+    // {
+    //     tplId: 'favorite-page',
+    //     title: 'favorite',
+    //     class: FavoritePage
+    // }
 ];
 
 class App {
@@ -39,7 +39,7 @@ class App {
 
         // storage
         storage.dictionary = new YaDictionary();
-        storage.favorite = new Favorite(constants.FAVORITE_STORAGE_KEY); // TODO: where store ID?
+        storage.history = new HistoryStorage(constants.HISTORY_STORAGE_KEY);
         storage.notifications = new Notifications(this.showDict.bind(this));
 
         this.renderPagesButtons();

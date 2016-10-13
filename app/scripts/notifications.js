@@ -24,8 +24,8 @@ class Notifications {
         this.timer = setInterval(() => {
             notification = null;
 
-            storage.favorite.read().then(() => {
-                const list = storage.favorite.list();
+            storage.history.read().then(() => {
+                const list = storage.history.list();
                 const index = helpers.getRandom(0, list.length);
                 const dict = list[index];
 

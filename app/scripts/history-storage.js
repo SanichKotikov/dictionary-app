@@ -3,7 +3,7 @@
 // node modules
 const jsonStorage = require('electron-json-storage');
 
-class Favorite {
+class HistoryStorage {
 
     constructor(storageKey) {
         this._key = storageKey;
@@ -50,7 +50,7 @@ class Favorite {
 
             // TODO: optimise dict.data before
             this._list.push(dict);
-            this.save().then(() => resolve(this._list));
+            this.save().then(() => resolve([...this._list]));
         });
     }
 
@@ -85,4 +85,4 @@ class Favorite {
     }
 }
 
-module.exports = Favorite;
+module.exports = HistoryStorage;

@@ -160,6 +160,28 @@ code {
 
 /* DICT PAGE */
 
+.dict-page {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+}
+
+.dict-dict {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.dict-history {
+    width: 220px;
+    margin: var(--half-padding) 0 0 var(--half-padding);
+    padding-left: var(--padding);
+    font-size: .9em;
+    border-left: 1px solid #555;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 .dict-header {
     display: flex;
     align-items: flex-end;
@@ -270,16 +292,16 @@ code {
     overflow-y: scroll;
 }
 
-.favorite-card {
+.teaser-card {
     margin-bottom: var(--half-padding);
     line-height: 1.4;
 }
 
-.favorite-card-title {
+.teaser-card-title {
     pointer-events: none;
 }
 
-.favorite-card-translations {
+.teaser-card-translations {
     color: #999;
     font-size: .8em;
     white-space: nowrap;

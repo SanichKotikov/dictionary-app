@@ -1,12 +1,17 @@
 'use strict';
 
+const constants = require('../scripts/constants');
+
 class Card {
 
-    constructor(dict) {
+    constructor(dict, isTeaser = false) {
         this._dict = dict;
+        this.isTeaser = isTeaser;
 
         // templates
-        this._cardTpl = document.querySelector('template#card');
+        const templateID = isTeaser ? 'template#teaser-card' : 'template#card';
+
+        this._cardTpl = document.querySelector(templateID);
         this._titleTpl = document.querySelector('template#card-title');
         this._translateTpl = document.querySelector('template#card-tr');
     }
@@ -57,17 +62,26 @@ class Card {
     }
 
     html() {
+        const dict = this._dict;
         const html = document.importNode(this._cardTpl.content, true);
-        const title = html.querySelector('.card-title');
 
-        title.appendChild(this._title());
+        if (this.isTeaser) {
+            const divs = html.querySelectorAll(`.${constants.TEASER_CARD_CLASS} > div`);
+            html.querySelector(`.${constants.TEASER_CARD_CLASS}`).dataset.name = dict.text;
 
-        const translations = html.querySelector('.card-translations');
-        const trList = this._dict.tr;
+            divs[0].innerHTML = `${dict.text} <span class="transcription">[${dict.data[0].ts}]<span>`;
+            divs[1].textContent = dict.data.map(item => item.tr[0].text).join(', ');
+        } else {
+            const title = html.querySelector('.card-title');
+            title.appendChild(this._title());
 
-        if (trList && trList.length) {
-            for (const item of trList) {
-                translations.appendChild(this._trItem(item));
+            const translations = html.querySelector('.card-translations');
+            const trList = dict.tr;
+
+            if (trList && trList.length) {
+                for (const item of trList) {
+                    translations.appendChild(this._trItem(item));
+                }
             }
         }
 
