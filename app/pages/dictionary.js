@@ -101,16 +101,9 @@ class DictPage extends Page {
         if (!value) return;
 
         // TODO: stats os searching
-        // TODO: add by second enter
 
         const now = Date.now();
         const cache = storage.historyStorage.get(value);
-
-        // TODO: remove
-        if (cache) {
-            console.log('diff: ', (now - cache.timestamp));
-            console.log('TIME_DAY: ', constants.TIME_DAY);
-        }
 
         if (cache && (now - cache.timestamp) < constants.TIME_DAY) {
             storage.currentDict = cache;
@@ -120,12 +113,16 @@ class DictPage extends Page {
 
         storage.dictionary.get(value).then(json => {
             const data = json.def || [];
-            storage.currentDict = { text: value, data: data, timestamp: now };
+            const dict = { text: value, data: data, timestamp: now };
 
+            storage.currentDict = dict;
             this.renderSheet(data);
 
-            if (!cache) {
-                this[TARGETS.addButton].disabled = false;
+            if (!cache && data.length) {
+                storage.historyStorage.add(dict).then(list => {
+                    this.renderHistory(list);
+                    console.log(list.length);
+                });
             } else {
                 storage.historyStorage.update(storage.currentDict);
             }
@@ -133,14 +130,14 @@ class DictPage extends Page {
     }
 
     onAddClick(event) {
-        if (storage.historyStorage.has(storage.currentDict.text)) return;
-        event.stopPropagation();
-
-        storage.historyStorage.add(storage.currentDict).then(list => {
-            this[TARGETS.addButton].disabled = true;
-            this.renderHistory(list);
-            console.log(list.length);
-        });
+        // if (storage.historyStorage.has(storage.currentDict.text)) return;
+        // event.stopPropagation();
+        //
+        // storage.historyStorage.add(storage.currentDict).then(list => {
+        //     this[TARGETS.addButton].disabled = true;
+        //     this.renderHistory(list);
+        //     console.log(list.length);
+        // });
     }
 
     onHistoryClick(event) {

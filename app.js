@@ -1,13 +1,9 @@
 'use strict';
 
-const {
-    app,
-    BrowserWindow,
-    Menu,
-    Tray,
-} = require('electron');
-
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
+const appMenu = require('./app/menus/main');
+const trayMenu = require('./app/menus/tray');
 
 /**
  * Application
@@ -16,10 +12,11 @@ class App {
 
     constructor() {
         this.win = null;
+        this.menu = null;
         this.tray = null;
 
         this.createWindow();
-        this.createTray();
+        this.createMenus();
     }
 
     createWindow() {
@@ -51,22 +48,9 @@ class App {
         });
     }
 
-    createTray() {
-        const iconIdle = path.join(__dirname, 'images', 'tray.png');
-        this.tray = new Tray(iconIdle);
-
-        const contextMenu = Menu.buildFromTemplate([
-            {
-                label: 'Show Window',
-                click: () => this.win.show()
-            },
-            {
-                label: 'Quit',
-                click: () => app.quit()
-            }
-        ]);
-
-        this.tray.setContextMenu(contextMenu);
+    createMenus() {
+        this.menu = Menu.setApplicationMenu(appMenu);
+        this.tray = trayMenu(this.win);
     }
 }
 
