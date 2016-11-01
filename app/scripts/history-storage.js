@@ -29,7 +29,7 @@ class HistoryStorage {
             jsonStorage.get(this._key, (error, data) => {
                 if (error) throw error;
                 this._list = (Array.isArray(data) && data.length) ? data : [];
-                console.log(this._list.length);
+                // console.log(this._list.length);
                 resolve();
             });
         });
@@ -50,6 +50,13 @@ class HistoryStorage {
 
             // TODO: optimise dict.data before
             this._list.push(dict);
+            this.save().then(() => resolve([...this._list]));
+        });
+    }
+
+    remove(text) {
+        return new Promise(resolve => {
+            this._list = this._list.filter(item => item.text !== text);
             this.save().then(() => resolve([...this._list]));
         });
     }

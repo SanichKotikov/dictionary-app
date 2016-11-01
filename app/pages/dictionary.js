@@ -1,5 +1,8 @@
 'use strict';
 
+const { remote } = require('electron');
+const { Menu } = remote;
+
 const Page = require('./page');
 const Card = require('../components/card');
 const Sheet = require('../components/sheet');
@@ -41,6 +44,7 @@ class DictPage extends Page {
         this[TARGETS.hints].addEventListener('click', event => this.onHintClick(event));
         this[TARGETS.addButton].addEventListener('click', event => this.onAddClick(event));
         this[TARGETS.history].addEventListener('click', event => this.onHistoryClick(event));
+        this[TARGETS.history].addEventListener('contextmenu', event => this.onHistoryContext(event));
 
         this[TARGETS.input].addEventListener('keyup', event => {
             event.stopPropagation();
@@ -121,7 +125,6 @@ class DictPage extends Page {
             if (!cache && data.length) {
                 storage.history.add(dict).then(list => {
                     this.renderHistory(list);
-                    console.log(list.length);
                 });
             } else {
                 storage.history.update(storage.currentDict);
@@ -151,6 +154,23 @@ class DictPage extends Page {
         }
     }
 
+    onHistoryContext(event) {
+        const target = event.target;
+
+        if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            const menu = Menu.buildFromTemplate([{
+                label: 'Delete',
+                click: () => storage.history.remove(target.dataset.name)
+                    .then(list => this.renderHistory(list))
+            }]);
+
+            menu.popup(remote.getCurrentWindow());
+        }
+    }
+
     renderSheet(cards) {
         const sheet = new Sheet(cards);
 
@@ -166,6 +186,7 @@ class DictPage extends Page {
         promise.then(() => {
             const html = document.createDocumentFragment();
             const list = storage.history.list();
+            console.log(list.length);
             list.reverse();
 
             this[TARGETS.history].innerHTML = '';
