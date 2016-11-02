@@ -4,6 +4,7 @@ const { remote } = require('electron');
 const { Menu } = remote;
 
 const Page = require('./page');
+const Find = require('../components/find');
 const Card = require('../components/card');
 const Sheet = require('../components/sheet');
 
@@ -12,14 +13,10 @@ const storage = require('../scripts/storage');
 const helpers = require('../scripts/helpers');
 
 const TARGETS = {
-    input: 'dict-input',
-    hints: 'dict-hints',
-    addButton: 'dict-add-button',
+    header: 'dict-header',
     sheet: 'dict-sheet',
     history: 'dict-history',
 };
-
-const HINT_ITEM_CLASS = 'dictionary-input-hint-item';
 
 class DictPage extends Page {
 
@@ -29,6 +26,10 @@ class DictPage extends Page {
         if (storage.currentDict) {
             this.setDict();
         }
+
+        const find = new Find(this.onFindChange.bind(this));
+        this[TARGETS.header].innerHTML = '';
+        this[TARGETS.header].appendChild(find.html);
 
         this.bindHandlers();
         this.renderHistory();
@@ -40,107 +41,19 @@ class DictPage extends Page {
     }
 
     bindHandlers() {
-        this[TARGETS.input].addEventListener('input', event => this.onInputChange(event));
-        this[TARGETS.hints].addEventListener('click', event => this.onHintClick(event));
-        this[TARGETS.addButton].addEventListener('click', event => this.onAddClick(event));
         this[TARGETS.history].addEventListener('click', event => this.onHistoryClick(event));
         this[TARGETS.history].addEventListener('contextmenu', event => this.onHistoryContext(event));
-
-        this[TARGETS.input].addEventListener('keyup', event => {
-            event.stopPropagation();
-
-            if (event.keyCode === constants.ENTER_KEY_CODE) {
-                this[TARGETS.hints].hidden = true;
-                this.onInputClick();
-            }
-        });
     }
 
-    onInputChange() {
-        const value = this[TARGETS.input].value;
+    onFindChange(data, cache) {
+        this.renderSheet(data);
 
-        if (!value.length) {
-            this[TARGETS.hints].hidden = true;
+        if (!cache && data.length) {
+            storage.history.add(storage.currentDict)
+                .then(list => this.renderHistory(list));
         } else {
-            const found = storage.history.getSortedCopyOfList()
-                .filter(f => f.text.substr(0, value.length) === value);
-
-            if (!found.length) {
-                this[TARGETS.hints].hidden = true;
-                return;
-            }
-
-            const html = document.createDocumentFragment();
-
-            for (const item of found) {
-                const props = {
-                    class: HINT_ITEM_CLASS,
-                    'data-text': item.text
-                };
-
-                html.appendChild(helpers.html('div', props, item.text));
-            }
-
-            this[TARGETS.hints].innerHTML = '';
-            this[TARGETS.hints].appendChild(html);
-            this[TARGETS.hints].hidden = false;
+            storage.history.update(storage.currentDict);
         }
-    }
-
-    onHintClick(event) {
-        const target = event.target;
-
-        if (target.classList.contains(HINT_ITEM_CLASS)) {
-            event.stopPropagation();
-
-            this[TARGETS.input].value = target.dataset.text;
-            this[TARGETS.hints].hidden = true;
-
-            this.onInputClick();
-        }
-    }
-
-    onInputClick() {
-        const value = this[TARGETS.input].value;
-        if (!value) return;
-
-        // TODO: stats os searching
-
-        const now = Date.now();
-        const cache = storage.history.get(value);
-
-        if (cache && (now - cache.timestamp) < constants.TIME_DAY) {
-            storage.currentDict = cache;
-            this.renderSheet(cache.data);
-            return;
-        }
-
-        storage.dictionary.get(value).then(json => {
-            const data = json.def || [];
-            const dict = { text: value, data: data, timestamp: now };
-
-            storage.currentDict = dict;
-            this.renderSheet(data);
-
-            if (!cache && data.length) {
-                storage.history.add(dict).then(list => {
-                    this.renderHistory(list);
-                });
-            } else {
-                storage.history.update(storage.currentDict);
-            }
-        });
-    }
-
-    onAddClick(event) {
-        // if (storage.historyStorage.has(storage.currentDict.text)) return;
-        // event.stopPropagation();
-        //
-        // storage.historyStorage.add(storage.currentDict).then(list => {
-        //     this[TARGETS.addButton].disabled = true;
-        //     this.renderHistory(list);
-        //     console.log(list.length);
-        // });
     }
 
     onHistoryClick(event) {

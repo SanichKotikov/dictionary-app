@@ -26,14 +26,8 @@
     <template id="dict-page">
         <div class="dict-page">
             <div class="dict-dict">
-                <div class="dict-header">
-                    <div class="dictionary-input-wr">
-                        <input id="dict-input" type="text" placeholder="Input Word">
-                        <div id="dict-hints" class="dictionary-input-hints" hidden>
-                            <!-- content -->
-                        </div>
-                    </div>
-                    <button id="dict-add-button" class="add-button" disabled>+</button>
+                <div id="dict-header" class="dict-header">
+                    <!-- content -->
                 </div>
                 <div id="dict-sheet" class="dict-sheet">
                     <!-- content -->
@@ -56,6 +50,15 @@
 
     <!-- /PAGES -->
     <!-- TEMPLATES -->
+
+    <template id="find">
+        <div class="find">
+            <input id="find-input" type="text" placeholder="">
+            <div id="find-hints" class="find-hints" hidden>
+                <!-- content -->
+            </div>
+        </div>
+    </template>
 
     <template id="card">
         <div class="card">
