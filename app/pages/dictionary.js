@@ -27,16 +27,16 @@ class DictPage extends Page {
             this.setDict();
         }
 
-        const find = new Find(this.onFindChange.bind(this));
+        this.findComp = new Find(this.onFindChange.bind(this));
         this[TARGETS.header].innerHTML = '';
-        this[TARGETS.header].appendChild(find.html);
+        this[TARGETS.header].appendChild(this.findComp.html);
 
         this.bindHandlers();
         this.renderHistory();
     }
 
     setDict() {
-        this[TARGETS.input].value = storage.currentDict.text;
+        this.findComp.updateText();
         this.renderSheet(storage.currentDict.data);
     }
 

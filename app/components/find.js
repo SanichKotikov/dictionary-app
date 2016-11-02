@@ -98,6 +98,10 @@ class Find {
             this.onChange(data, cache);
         });
     }
+
+    updateText(text) {
+        this.input.value = text || storage.currentDict.text;
+    }
 }
 
 module.exports = Find;
