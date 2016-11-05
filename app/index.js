@@ -51,7 +51,7 @@ class App {
         this.bindHandlers();
 
         // default page
-        this.showPage(PAGES[1]);
+        this.showPage(PAGES[0]);
     }
 
     renderPagesButtons() {
