@@ -26,6 +26,20 @@ const helpers = {
         return el;
     },
 
+    /**
+     * Replace content
+     * @param {!HTMLElement} el
+     * @param {!(HTMLElement|DocumentFragment)} content
+     * @param {boolean} redraw
+     */
+    replaceHtml(el, content, redraw = false) {
+        el.innerHTML = '';
+
+        (redraw === true)
+            ? setTimeout(() => el.appendChild(content), 30)
+            : el.appendChild(content);
+    },
+
     getRandom(min, max) {
         return parseInt(Math.random() * (max - min) + min, 10);
     }

@@ -8,11 +8,14 @@ const constants = require('./constants');
 const storage = require('./storage');
 const helpers = require('./helpers');
 
+const NotificationLogger = require('./notification-storage');
+
 class Notifications {
 
     constructor(onClick) {
         this.onClick = onClick || function () {};
         this.timer = 0;
+        this.logger = new NotificationLogger();
 
         this.run();
     }
@@ -25,14 +28,16 @@ class Notifications {
             notification = null;
 
             storage.history.read().then(() => {
-                const list = storage.history.list();
+                const list = storage.history.getList();
                 const index = helpers.getRandom(0, list.length);
                 const dict = list[index];
 
-                notification = new Notification(`${dict.text} :: [${dict.data[0].ts}]`, {
+                notification = new Notification(`${dict.id} :: [${dict.data[0].ts}]`, {
                     tag: 'dict-app-random-word',
                     body: dict.data.map(item => item.tr[0].text).join(', '),
                 });
+
+                this.logger.increment(dict.id);
 
                 notification.onclick = () => {
                     this.onClick(dict);

@@ -1,6 +1,6 @@
 'use strict';
 
-const { remote } = require('electron');
+const { remote, webFrame } = require('electron');
 
 // app modules
 const constants = require('./scripts/constants');
@@ -9,10 +9,11 @@ const helpers = require('./scripts/helpers');
 
 const YaDictionary = require('./api/ya.dictionary');
 const HistoryStorage = require('./scripts/history-storage');
+const FavoriteStorage = require('./scripts/favorite-storege');
 const Notifications = require('./scripts/notifications');
 
 const DictPage = require('./pages/dictionary');
-// const FavoritePage = require('./pages/favorite');
+const FavoritePage = require('./pages/favorite');
 
 const PAGES = [
     {
@@ -20,37 +21,40 @@ const PAGES = [
         title: 'dictionary',
         class: DictPage
     },
-    // {
-    //     tplId: 'favorite-page',
-    //     title: 'favorite',
-    //     class: FavoritePage
-    // }
+    {
+        tplId: 'favorite-page',
+        title: 'favorite',
+        class: FavoritePage
+    },
 ];
 
 class App {
 
     constructor(appId) {
-        this._win = remote.getCurrentWindow();
+        this.win = remote.getCurrentWindow();
 
         // dom
-        this._appEl = document.getElementById(appId || 'app');
-        this._aSide = this._appEl.querySelector('#aside');
-        this._pageEl = this._appEl.querySelector('#page');
+        this.appEl = document.getElementById(appId || 'app');
+        this.aSide = this.appEl.querySelector('#aside');
+        this.pageEl = this.appEl.querySelector('#page');
 
         // storage
         storage.dictionary = new YaDictionary();
         storage.history = new HistoryStorage(constants.HISTORY_STORAGE_KEY);
+        storage.favorite = new FavoriteStorage(constants.FAVORITE_STORAGE_KEY);
         storage.notifications = new Notifications(this.showDict.bind(this));
+
+        // Disable pinch zoom
+        webFrame.setZoomLevelLimits(1, 1);
 
         this.renderPagesButtons();
         this.bindHandlers();
 
         // default page
-        this.showPage(PAGES[0]);
+        this.showPage(PAGES[1]);
     }
 
     renderPagesButtons() {
-        this._aSide.innerHTML = '';
         const html = document.createDocumentFragment();
 
         for (const page of PAGES) {
@@ -62,11 +66,11 @@ class App {
             html.appendChild(helpers.html('button', props, page.title.substr(0, 1)));
         }
 
-        this._aSide.appendChild(html);
+        helpers.replaceHtml(this.aSide, html);
     }
 
     bindHandlers() {
-        this._aSide.addEventListener('click', event => this.onAsideClick(event));
+        this.aSide.addEventListener('click', event => this.onAsideClick(event));
     }
 
     showDict(dict) {
@@ -74,15 +78,14 @@ class App {
         storage.currentDict = dict;
         this.showPage(PAGES[0]); // TODO:
 
-        if (!this._win.isVisible()) {
-            this._win.show();
+        if (!this.win.isVisible()) {
+            this.win.show();
         }
     }
 
     showPage(page) {
         const inst = new page.class(page.tplId);
-        this._pageEl.innerHTML = '';
-        this._pageEl.appendChild(inst.html);
+        helpers.replaceHtml(this.pageEl, inst.html);
     }
 
     onAsideClick(event) {

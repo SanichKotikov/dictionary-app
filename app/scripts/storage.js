@@ -2,10 +2,13 @@
 
 const storage = {
     currentDict: null,
+    currentFavorite: null,
+
     dictionary: null,
+    notifications: null,
+
     favorite: null,
     history: null,
-    notifications: null,
 };
 
 module.exports = storage;

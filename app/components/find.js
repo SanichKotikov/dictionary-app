@@ -10,8 +10,8 @@ function renderHints(items) {
     const html = document.createDocumentFragment();
 
     for (const item of items) {
-        const props = { class: HINT_ITEM_CLASS, 'data-text': item.text };
-        html.appendChild(helpers.html('div', props, item.text));
+        const props = { class: HINT_ITEM_CLASS, 'data-text': item.id };
+        html.appendChild(helpers.html('div', props, item.id));
     }
 
     return html;
@@ -19,11 +19,12 @@ function renderHints(items) {
 
 class Find {
 
-    constructor(onChange) {
+    constructor(onChange, placeholder = 'Search') {
         const tpl = document.querySelector('template#find');
         this.html = document.importNode(tpl.content, true);
 
         this.input = this.html.querySelector('#find-input');
+        this.input.placeholder = placeholder;
         this.hints = this.html.querySelector('#find-hints');
 
         this.onChange = onChange || function() {};
@@ -54,15 +55,15 @@ class Find {
         }
 
         const found = storage.history.getSortedCopyOfList()
-            .filter(f => f.text.substr(0, value.length) === value);
+            .filter(f => f.id.substr(0, value.length) === value)
+            .slice(0, 10);
 
         if (!found.length) {
             this.hints.hidden = true;
             return;
         }
 
-        this.hints.innerHTML = '';
-        this.hints.appendChild(renderHints(found));
+        helpers.replaceHtml(this.hints, renderHints(found));
         this.hints.hidden = false;
     }
 
@@ -87,20 +88,18 @@ class Find {
         const cache = storage.history.get(value);
 
         if (cache && (now - cache.timestamp) < constants.TIME_DAY) {
-            storage.currentDict = cache;
-            this.onChange(cache.data, cache);
+            this.onChange(cache, !!cache);
             return;
         }
 
         storage.dictionary.get(value).then(json => {
-            const data = json.def || [];
-            storage.currentDict = { text: value, data: data, timestamp: now };
-            this.onChange(data, cache);
+            const dict = { id: value, data: json.def || [], timestamp: now };
+            this.onChange(dict, !!cache);
         });
     }
 
     updateText(text) {
-        this.input.value = text || storage.currentDict.text;
+        this.input.value = text || storage.currentDict.id;
     }
 }
 
