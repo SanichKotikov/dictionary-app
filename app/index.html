@@ -41,10 +41,25 @@
 
     <!-- favorite page -->
     <template id="favorite-page">
-        <h1>Favorite</h1>
-        <div class="favorite-page-wr">
-            <div id="favorite-list" class="favorite-list"></div>
-            <div id="favorite-sheet" class="favorite-page-cards"></div>
+        <!--<h1>lists of favorite words</h1>-->
+        <div class="favorite-page">
+            <div class="favorite-page-column favorite-sets">
+                <div id="favorite-sets" class="favorite-sets-list">
+                    <!-- content -->
+                </div>
+                <input id="favorite-new-set" type="text" placeholder="New List">
+            </div>
+            <div class="favorite-page-column favorite-words">
+                <div id="favorite-words" class="favorite-words-list">
+                    <!-- content -->
+                </div>
+                <div id="favorite-words-find"></div>
+            </div>
+            <div class="favorite-page-column favorite-history">
+                <div id="favorite-history" class="favorite-history-list">
+                    <!-- content -->
+                </div>
+            </div>
         </div>
     </template>
 

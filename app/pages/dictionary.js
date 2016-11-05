@@ -23,13 +23,12 @@ class DictPage extends Page {
     constructor(templateId) {
         super(templateId, TARGETS);
 
+        this.findComp = new Find(this.onFindChange.bind(this));
+        helpers.replaceHtml(this[TARGETS.header], this.findComp.html);
+
         if (storage.currentDict) {
             this.setDict();
         }
-
-        this.findComp = new Find(this.onFindChange.bind(this));
-        this[TARGETS.header].innerHTML = '';
-        this[TARGETS.header].appendChild(this.findComp.html);
 
         this.bindHandlers();
         this.renderHistory();
@@ -45,14 +44,16 @@ class DictPage extends Page {
         this[TARGETS.history].addEventListener('contextmenu', event => this.onHistoryContext(event));
     }
 
-    onFindChange(data, cache) {
-        this.renderSheet(data);
+    onFindChange(dict, cached) {
+        storage.currentDict = dict;
+        this.renderSheet(dict.data);
 
-        if (!cache && data.length) {
-            storage.history.add(storage.currentDict)
+        // TODO:
+        if (!cached && dict.data.length) {
+            storage.history.add(dict)
                 .then(list => this.renderHistory(list));
         } else {
-            storage.history.update(storage.currentDict);
+            storage.history.update(dict);
         }
     }
 
@@ -86,9 +87,7 @@ class DictPage extends Page {
 
     renderSheet(cards) {
         const sheet = new Sheet(cards);
-
-        this[TARGETS.sheet].innerHTML = '';
-        setTimeout(() => this[TARGETS.sheet].appendChild(sheet.html), 30);
+        helpers.replaceHtml(this[TARGETS.sheet], sheet.html, true);
     }
 
     renderHistory(list = null) {
@@ -98,17 +97,15 @@ class DictPage extends Page {
 
         promise.then(() => {
             const html = document.createDocumentFragment();
-            const list = storage.history.list();
-            console.log(list.length);
-            list.reverse();
+            const list = storage.history.getList().reverse();
 
-            this[TARGETS.history].innerHTML = '';
+            console.info(list.length);
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());
             }
 
-            this[TARGETS.history].appendChild(html);
+            helpers.replaceHtml(this[TARGETS.history], html);
         });
     }
 }
