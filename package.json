@@ -7,17 +7,17 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cdrpro/dictionary-app"
+    "url": "https://github.com/SanichKotikov/dictionary-app"
   },
   "scripts": {
     "start": "electron .",
     "build": "electron-packager ./ --platform=darwin --arch=x64 --icon=./images/icon.icns --out=build --overwrite"
   },
   "devDependencies": {
-    "electron": "^1.4.3",
-    "electron-packager": "^8.1.0"
+    "electron": "^1.4.14",
+    "electron-packager": "^8.5.0"
   },
   "dependencies": {
-    "electron-json-storage": "^2.0.0"
+    "electron-json-storage": "^2.1.1"
   }
 }
