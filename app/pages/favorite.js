@@ -44,6 +44,9 @@ class FavoritePage extends Page {
 
     onFindChange(dict, cached) {
         if (!storage.currentFavorite) return;
+        if (!dict.data.length) return;
+
+        this.findComp.updateText('');
 
         storage.currentFavorite.add(dict)
             .then(list => this.renderWords(list));

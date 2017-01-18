@@ -134,6 +134,7 @@ code {
              calc(var(--padding) * 1.5);
     flex: 1;
     background: #444;
+    overflow: hidden;
 }
 
 .page {
@@ -335,9 +336,17 @@ code {
     border-bottom: 0;
 }
 
+.favorite-words-list .teaser-card {
+    cursor: e-resize;
+}
+
 
 .favorite-history-list {
     padding: var(--half-padding) calc(var(--half-padding) + 6px);
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.favorite-history-list .teaser-card {
+    cursor: w-resize;
 }

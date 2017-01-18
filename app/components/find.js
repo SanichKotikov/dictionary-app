@@ -99,7 +99,7 @@ class Find {
     }
 
     updateText(text) {
-        this.input.value = text || storage.currentDict.id;
+        this.input.value = (text !== null && text !== undefined) ? text : storage.currentDict.id;
     }
 }
 
