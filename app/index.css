@@ -237,6 +237,11 @@ code {
     -webkit-user-select: text;
 }
 
+.card + .card {
+    padding-top: 10px;
+    border-top: 1px solid #555;
+}
+
 .card-title {
     word-spacing: .2em;
 }
@@ -336,17 +341,9 @@ code {
     border-bottom: 0;
 }
 
-.favorite-words-list .teaser-card {
-    cursor: e-resize;
-}
 
-
-.favorite-history-list {
+.favorite-dict-sheet {
     padding: var(--half-padding) calc(var(--half-padding) + 6px);
     overflow-x: hidden;
     overflow-y: scroll;
-}
-
-.favorite-history-list .teaser-card {
-    cursor: w-resize;
 }

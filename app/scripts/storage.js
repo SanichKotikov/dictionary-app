@@ -3,6 +3,7 @@
 const storage = {
     currentDict: null,
     currentFavorite: null,
+    currentFavoriteDict: null,
 
     dictionary: null,
     notifications: null,

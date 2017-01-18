@@ -3,6 +3,7 @@
 const Page = require('./page');
 const Find = require('../components/find');
 const Card = require('../components/card');
+const Sheet = require('../components/sheet');
 
 const FavoriteSetStorage = require('../scripts/favorite-set-storage');
 
@@ -17,7 +18,7 @@ const TARGETS = {
     newSet: 'favorite-new-set',
     words: 'favorite-words',
     wordsFind: 'favorite-words-find',
-    history: 'favorite-history',
+    dictSheet: 'favorite-dict-sheet',
 };
 
 class FavoritePage extends Page {
@@ -32,14 +33,16 @@ class FavoritePage extends Page {
 
         this.renderSets();
         this.renderWords();
-        this.renderHistory();
+
+        if (storage.currentFavoriteDict) {
+            this.renderSheet(storage.currentFavoriteDict.data);
+        }
     }
 
     bindHandlers() {
         this[TARGETS.sets].addEventListener('click', event => this.onSetClick(event));
         this[TARGETS.newSet].addEventListener('keyup', event => this.onEnterNewSet(event));
-        this[TARGETS.words].addEventListener('click', event => this.onCardClick(event, false));
-        this[TARGETS.history].addEventListener('click', event => this.onCardClick(event, true));
+        this[TARGETS.words].addEventListener('click', event => this.onCardClick(event));
     }
 
     onFindChange(dict, cached) {
@@ -96,7 +99,7 @@ class FavoritePage extends Page {
         this.renderSets(list);
     }
 
-    onCardClick(event, isAdd) {
+    onCardClick(event) {
         event.stopPropagation();
         if (!storage.currentFavorite) return;
 
@@ -104,11 +107,10 @@ class FavoritePage extends Page {
         if (!target.classList.contains(constants.TEASER_CARD_CLASS)) return;
 
         const name = target.dataset.name;
-        const promise = isAdd
-            ? storage.currentFavorite.add(storage.history.get(name))
-            : storage.currentFavorite.remove(name);
+        const item = storage.currentFavorite.get(name);
 
-        promise.then(list => this.renderWords(list));
+        storage.currentFavoriteDict = item;
+        this.renderSheet(item.data);
     }
 
     renderSets(list = null) {
@@ -151,17 +153,9 @@ class FavoritePage extends Page {
         });
     }
 
-    renderHistory() {
-        storage.history.read().then(() => {
-            const html = document.createDocumentFragment();
-            const list = storage.history.getList().reverse();
-
-            for (const item of list) {
-                html.appendChild((new Card(item, true)).html());
-            }
-
-            helpers.replaceHtml(this[TARGETS.history], html);
-        });
+    renderSheet(cards) {
+        const sheet = new Sheet(cards);
+        helpers.replaceHtml(this[TARGETS.dictSheet], sheet.html, true);
     }
 }
 
