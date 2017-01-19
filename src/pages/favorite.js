@@ -5,10 +5,10 @@ const Find = require('../components/find');
 const Card = require('../components/card');
 const Sheet = require('../components/sheet');
 
-const FavoriteSetStorage = require('../scripts/favorite-set-storage');
+const FavoriteSetStorage = require('../storages/favorite-set-storage');
 
 const constants = require('../scripts/constants');
-const storage = require('../scripts/storage');
+const storage = require('../storages/storage');
 const helpers = require('../scripts/helpers');
 
 const SET_ITEM_CLASS = 'favorite-set-item';

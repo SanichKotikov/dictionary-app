@@ -5,10 +5,10 @@ const path = require('path');
 
 // app modules
 const constants = require('./constants');
-const storage = require('./storage');
+const storage = require('../storages/storage');
 const helpers = require('./helpers');
 
-const NotificationLogger = require('./notification-storage');
+const NotificationLogger = require('../storages/notification-storage');
 
 class Notifications {
 

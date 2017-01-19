@@ -3,17 +3,17 @@
 const { remote, webFrame } = require('electron');
 
 // app modules
-const constants = require('./scripts/constants');
-const storage = require('./scripts/storage');
-const helpers = require('./scripts/helpers');
+const constants = require('../../scripts/constants');
+const storage = require('../../storages/storage');
+const helpers = require('../../scripts/helpers');
 
-const YaDictionary = require('./api/ya.dictionary');
-const HistoryStorage = require('./scripts/history-storage');
-const FavoriteStorage = require('./scripts/favorite-storege');
-const Notifications = require('./scripts/notifications');
+const YaDictionary = require('../../api/ya.dictionary');
+const HistoryStorage = require('../../storages/history-storage');
+const FavoriteStorage = require('../../storages/favorite-storege');
+const Notifications = require('../../scripts/notifications');
 
-const DictPage = require('./pages/dictionary');
-const FavoritePage = require('./pages/favorite');
+const DictPage = require('../../pages/dictionary');
+const FavoritePage = require('../../pages/favorite');
 
 const PAGES = [
     {

@@ -4,7 +4,7 @@
   "description": "",
   "author": "Sanich <sancho@cdrpro.ru>",
   "license": "MIT",
-  "main": "app.js",
+  "main": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/SanichKotikov/dictionary-app"

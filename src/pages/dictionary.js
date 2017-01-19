@@ -9,7 +9,7 @@ const Card = require('../components/card');
 const Sheet = require('../components/sheet');
 
 const constants = require('../scripts/constants');
-const storage = require('../scripts/storage');
+const storage = require('../storages/storage');
 const helpers = require('../scripts/helpers');
 
 const TARGETS = {
