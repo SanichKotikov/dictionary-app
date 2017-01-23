@@ -1,14 +1,13 @@
-'use strict';
-
 import Page from './page';
 import Find from '../components/find';
 import Card from '../components/card';
 import Sheet from '../components/sheet';
 
+import { FavoriteStorageItem } from '../storages/favorite-storege';
 import FavoriteSetStorage from '../storages/favorite-set-storage';
 
 import constants from '../scripts/constants';
-import storage from '../storages/storage';
+import storage, { dictItemInterface } from '../storages/storage';
 import helpers from '../scripts/helpers';
 
 const SET_ITEM_CLASS = 'favorite-set-item';
@@ -21,9 +20,12 @@ const TARGETS = {
     dictSheet: 'favorite-dict-sheet',
 };
 
+
 class FavoritePage extends Page {
 
-    constructor(templateId) {
+    private findComp: Find;
+
+    constructor(templateId: string) {
         super(templateId, TARGETS);
 
         this.findComp = new Find(this.onFindChange.bind(this));
@@ -39,37 +41,34 @@ class FavoritePage extends Page {
         }
     }
 
-    bindHandlers() {
+    private bindHandlers(): void {
         this[TARGETS.sets].addEventListener('click', event => this.onSetClick(event));
         this[TARGETS.newSet].addEventListener('keyup', event => this.onEnterNewSet(event));
         this[TARGETS.words].addEventListener('click', event => this.onCardClick(event));
     }
 
-    onFindChange(dict, cached) {
+    private onFindChange(dict: dictItemInterface, cached: boolean): void {
         if (!storage.currentFavorite) return;
         if (!dict.data.length) return;
 
         this.findComp.updateText('');
 
-        storage.currentFavorite.add(dict)
-            .then(list => this.renderWords(list));
+        this.renderWords(storage.currentFavorite.add(dict));
 
-        // TODO:
         if (!cached && dict.data.length) {
-            storage.history.add(dict)
-                .then(list => this.renderHistory(list));
+            storage.history.add(dict);
         } else {
             storage.history.update(dict);
         }
     }
 
-    onSetClick(event) {
-        const target = event.target;
+    private onSetClick(event: Event): void {
+        const target = <HTMLElement>event.target;
 
         if (target.classList.contains(SET_ITEM_CLASS)) {
             event.stopPropagation();
 
-            const id = +target.dataset.id;
+            const id: number = +target.dataset['id'];
             storage.currentFavorite = new FavoriteSetStorage(id);
 
             [...this[TARGETS.sets].querySelectorAll(`.${SET_ITEM_CLASS}`)].map(el => {
@@ -80,7 +79,7 @@ class FavoritePage extends Page {
         }
     }
 
-    onEnterNewSet(event) {
+    private onEnterNewSet(event: KeyboardEvent): void {
         event.stopPropagation();
         if (event.keyCode !== constants.ENTER_KEY_CODE) return;
 
@@ -94,39 +93,35 @@ class FavoritePage extends Page {
             return;
         }
 
-        const list = storage.favorite.add({ id: Date.now(), name: name });
+        const addPromise = storage.favorite.add({ id: Date.now(), name: name });
         this[TARGETS.newSet].value = '';
-        this.renderSets(list);
+        this.renderSets(addPromise);
     }
 
-    onCardClick(event) {
+    private onCardClick(event: Event): void {
         event.stopPropagation();
         if (!storage.currentFavorite) return;
 
-        const target = event.target;
+        const target = <HTMLElement>event.target;
         if (!target.classList.contains(constants.TEASER_CARD_CLASS)) return;
 
-        const name = target.dataset.name;
+        const name = target.dataset['name'];
         const item = storage.currentFavorite.get(name);
 
         storage.currentFavoriteDict = item;
         this.renderSheet(item.data);
     }
 
-    renderSets(list = null) {
-        const promise = (list !== null)
-            ? new Promise(resolve => resolve(list))
-            : storage.favorite.read();
-
-        promise.then(() => {
+    private renderSets(promise: Promise<FavoriteStorageItem[]> = null): void {
+        (promise || storage.favorite.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list = storage.favorite.getList().reverse();
+            const list: FavoriteStorageItem[] = storage.favorite.getList().reverse();
 
             for (const item of list) {
                 html.appendChild(helpers.html('div', {
-                    class: SET_ITEM_CLASS,
+                    'class': SET_ITEM_CLASS,
                     'data-id': item.id,
-                    active: storage.currentFavorite && item.id === storage.currentFavorite.id
+                    'active': storage.currentFavorite && item.id === storage.currentFavorite.id
                 }, item.name));
             }
 
@@ -134,16 +129,12 @@ class FavoritePage extends Page {
         });
     }
 
-    renderWords(list = null) {
+    private renderWords(promise: Promise<dictItemInterface[]> = null): void {
         if (!storage.currentFavorite) return;
 
-        const promise = (list !== null)
-            ? new Promise(resolve => resolve(list))
-            : storage.currentFavorite.read();
-
-        promise.then(() => {
+        (promise || storage.currentFavorite.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list = storage.currentFavorite.getList();
+            const list: dictItemInterface[] = storage.currentFavorite.getList();
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());
@@ -153,10 +144,10 @@ class FavoritePage extends Page {
         });
     }
 
-    renderSheet(cards) {
+    private renderSheet(cards: any[]): void {
         const sheet = new Sheet(cards);
         helpers.replaceHtml(this[TARGETS.dictSheet], sheet.html, true);
     }
 }
 
-module.exports = FavoritePage;
+export default FavoritePage;

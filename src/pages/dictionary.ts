@@ -1,6 +1,4 @@
-'use strict';
-
-const { remote } = require('electron');
+import { remote } from 'electron';
 const { Menu } = remote;
 
 import Page from './page';
@@ -9,7 +7,7 @@ import Card from '../components/card';
 import Sheet from '../components/sheet';
 
 import constants from '../scripts/constants';
-import storage from '../storages/storage';
+import storage, { dictItemInterface } from '../storages/storage';
 import helpers from '../scripts/helpers';
 
 const TARGETS = {
@@ -18,9 +16,12 @@ const TARGETS = {
     history: 'dict-history',
 };
 
+
 class DictPage extends Page {
 
-    constructor(templateId) {
+    private findComp: Find;
+
+    constructor(templateId: string) {
         super(templateId, TARGETS);
 
         this.findComp = new Find(this.onFindChange.bind(this));
@@ -34,42 +35,41 @@ class DictPage extends Page {
         this.renderHistory();
     }
 
-    setDict() {
+    private setDict(): void {
         this.findComp.updateText();
         this.renderSheet(storage.currentDict.data);
     }
 
-    bindHandlers() {
+    private bindHandlers(): void {
         this[TARGETS.history].addEventListener('click', event => this.onHistoryClick(event));
         this[TARGETS.history].addEventListener('contextmenu', event => this.onHistoryContext(event));
     }
 
-    onFindChange(dict, cached) {
+    private onFindChange(dict: dictItemInterface, cached: boolean): void {
         storage.currentDict = dict;
         this.renderSheet(dict.data);
 
         // TODO:
         if (!cached && dict.data.length) {
-            storage.history.add(dict)
-                .then(list => this.renderHistory(list));
+            this.renderHistory(storage.history.add(dict));
         } else {
             storage.history.update(dict);
         }
     }
 
-    onHistoryClick(event) {
-        const target = event.target;
+    private onHistoryClick(event: Event): void {
+        const target = <HTMLElement>event.target;
 
         if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
             event.stopPropagation();
 
-            storage.currentDict = storage.history.get(target.dataset.name);
+            storage.currentDict = storage.history.get(target.dataset['name']);
             this.setDict();
         }
     }
 
-    onHistoryContext(event) {
-        const target = event.target;
+    private onHistoryContext(event: Event): void {
+        const target = <HTMLElement>event.target;
 
         if (target.classList.contains(constants.TEASER_CARD_CLASS)) {
             event.stopPropagation();
@@ -77,29 +77,22 @@ class DictPage extends Page {
 
             const menu = Menu.buildFromTemplate([{
                 label: 'Delete',
-                click: () => storage.history.remove(target.dataset.name)
-                    .then(list => this.renderHistory(list))
+                click: () => this.renderHistory(storage.history.remove(target.dataset['name']))
             }]);
 
             menu.popup(remote.getCurrentWindow());
         }
     }
 
-    renderSheet(cards) {
+    private renderSheet(cards: any[]): void {
         const sheet = new Sheet(cards);
         helpers.replaceHtml(this[TARGETS.sheet], sheet.html, true);
     }
 
-    renderHistory(list = null) {
-        const promise = (list !== null)
-            ? new Promise(resolve => resolve(list))
-            : storage.history.read();
-
-        promise.then(() => {
+    private renderHistory(promise: Promise<dictItemInterface[]> = null): void {
+        (promise || storage.history.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list = storage.history.getList().reverse();
-
-            console.info(list.length);
+            const list: dictItemInterface[] = storage.history.getList().reverse();
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());
@@ -110,4 +103,4 @@ class DictPage extends Page {
     }
 }
 
-module.exports = DictPage;
+export default DictPage;

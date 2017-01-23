@@ -12,8 +12,8 @@ import HistoryStorage from '../../storages/history-storage';
 import FavoriteStorage from '../../storages/favorite-storege';
 import Notifications from '../../scripts/notifications';
 
-const DictPage = require('../../pages/dictionary');
-const FavoritePage = require('../../pages/favorite');
+import DictPage from '../../pages/dictionary';
+import FavoritePage from '../../pages/favorite';
 
 const PAGES = [
     {

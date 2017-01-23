@@ -8,6 +8,21 @@ export interface dictItemInterface {
     data: any[],
 }
 
+export interface dictDataInterface {
+    pos: string;
+    text: string;
+    tr: dictDataTrInterface[];
+    ts: string;
+}
+
+export interface dictDataTrInterface {
+    ex?: any[];
+    mean: any[];
+    pos: string;
+    syn?: any[];
+    text: string;
+}
+
 interface storageInterface {
     currentDict: dictItemInterface,
     currentFavorite: FavoriteSetStorage,

@@ -1,5 +1,5 @@
 import constants from '../scripts/constants';
-// import { dictItemInterface } from '../storages/storage';
+import { dictItemInterface, dictDataInterface, dictDataTrInterface } from '../storages/storage';
 
 class Card {
 
@@ -7,7 +7,9 @@ class Card {
     titleTpl: HTMLTemplateElement;
     translateTpl: HTMLTemplateElement;
 
-    constructor(public dictData: any, public isTeaser: boolean = false) {
+    constructor(public dict: dictItemInterface | dictDataInterface,
+                public isTeaser: boolean = false) {
+
         const templateID = isTeaser ? 'template#teaser-card' : 'template#card';
 
         this.cardTpl = <HTMLTemplateElement>document.querySelector(templateID);
@@ -16,22 +18,23 @@ class Card {
     }
 
     setTitle(): Element {
+        const dict = <dictDataInterface>this.dict;
         const el = <Element>document.importNode(this.titleTpl.content, true);
         const spans = el.querySelectorAll('span');
 
-        spans[0].textContent = this.dictData.text;
+        spans[0].textContent = dict.text;
 
-        if (this.dictData.ts) {
-            spans[1].textContent = `[${this.dictData.ts}]`;
-            spans[1].dataset['text'] = this.dictData.text;
+        if (dict.ts) {
+            spans[1].textContent = `[${dict.ts}]`;
+            spans[1].dataset['text'] = dict.text;
         }
 
-        if (this.dictData.pos) spans[2].textContent = this.dictData.pos;
+        if (dict.pos) spans[2].textContent = dict.pos;
 
         return el;
     }
 
-    setTranslateItem(item): Element {
+    setTranslateItem(item: dictDataTrInterface): Element {
         const li = <Element>document.importNode(this.translateTpl.content, true);
         const divs = li.querySelectorAll('div');
         const syn = item.syn || [];
@@ -60,10 +63,10 @@ class Card {
     }
 
     html(): Element {
-        const dict = this.dictData;
         const html = <Element>document.importNode(this.cardTpl.content, true);
 
         if (this.isTeaser) {
+            const dict = <dictItemInterface>this.dict;
             const divs = html.querySelectorAll(`.${constants.TEASER_CARD_CLASS} > div`);
             const teaserCard = <HTMLElement>html.querySelector(`.${constants.TEASER_CARD_CLASS}`);
             teaserCard.dataset['name'] = dict.id;
@@ -71,11 +74,12 @@ class Card {
             divs[0].innerHTML = `${dict.id} <span class="transcription">[${dict.data[0].ts}]<span>`;
             divs[1].textContent = dict.data.map(item => item.tr[0].text).join(', ');
         } else {
+            const dict = <dictDataInterface>this.dict;
             const title = html.querySelector('.card-title');
             title.appendChild(this.setTitle());
 
             const translations = html.querySelector('.card-translations');
-            const trList = dict.tr;
+            const trList: dictDataTrInterface[] = dict.tr;
 
             if (trList && trList.length) {
                 for (const item of trList) {

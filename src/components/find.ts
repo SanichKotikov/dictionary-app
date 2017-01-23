@@ -1,7 +1,6 @@
 import constants from '../scripts/constants';
-import storage from '../storages/storage';
+import storage, { dictItemInterface } from '../storages/storage';
 import helpers from '../scripts/helpers';
-import { dictItemInterface } from '../storages/storage';
 
 const HINT_ITEM_CLASS = 'find-hint-item';
 
@@ -104,7 +103,7 @@ class Find {
         });
     }
 
-    public updateText(text: string): void {
+    public updateText(text?: string): void {
         this.input.value = (text !== null && text !== undefined) ? text : storage.currentDict.id;
     }
 }

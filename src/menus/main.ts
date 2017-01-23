@@ -1,10 +1,10 @@
 import { Menu, app } from 'electron';
 
-const viewSubMenu = [
+const viewSubMenu: Electron.MenuItemOptions[] = [
     {
         label: 'Toggle Developer Tools',
         accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click (item, focusedWindow) {
+        click (item: Electron.MenuItem, focusedWindow: Electron.BrowserWindow) {
             if (focusedWindow) focusedWindow.webContents.toggleDevTools()
         }
     },
@@ -14,13 +14,13 @@ if (process.defaultApp) {
     viewSubMenu.unshift({
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click (item, focusedWindow) {
+        click (item: Electron.MenuItem, focusedWindow: Electron.BrowserWindow) {
             if (focusedWindow) focusedWindow.reload()
         }
     });
 }
 
-const template = [
+const template: Electron.MenuItemOptions[] = [
     // Edit Menu
     {
         label: 'Edit',
@@ -40,7 +40,7 @@ const template = [
 
 // OSX
 if (process.platform === 'darwin') {
-    const name = app.getName();
+    const name: string = app.getName();
 
     template.unshift({
         label: name,
