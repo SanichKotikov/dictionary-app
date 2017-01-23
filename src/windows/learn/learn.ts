@@ -2,6 +2,7 @@ import { dictItem, learnAnswer } from '../../scripts/interfaces';
 import helpers from "../../scripts/helpers";
 import constants from '../../scripts/constants';
 import storage from '../../storages/storage';
+import LearnLogger from '../../storages/learn-logger';
 
 import FavoriteStorage, { FavoriteStorageItem } from '../../storages/favorite-storege';
 import FavoriteSetStorage from '../../storages/favorite-set-storage';
@@ -17,6 +18,7 @@ class App {
     private words: dictItem[];
     private card: LearnCard;
     private stat: learnAnswer[];
+    private learnLogger: LearnLogger;
 
     constructor() {
         this.appEl = document.getElementById('learn');
@@ -24,6 +26,7 @@ class App {
 
         storage.favorite = new FavoriteStorage(constants.FAVORITE_STORAGE_KEY);
         storage.favorite.read().then(() => this.renderStart());
+        this.learnLogger = new LearnLogger();
 
         this.onSelectFavorite = this.onSelectFavorite.bind(this);
         this.nextCard = this.nextCard.bind(this);
@@ -60,6 +63,10 @@ class App {
     }
 
     private nextCard(result: learnAnswer): void {
+        if (!result.correct) {
+            this.learnLogger.increment(result.dict.id);
+        }
+
         this.stat.push(result);
         const word = this.extractWord();
 

@@ -9,7 +9,7 @@ import constants from '../scripts/constants';
 import storage from '../storages/storage';
 import helpers from './helpers';
 
-import NotificationLogger from '../storages/notification-storage';
+import NotificationLogger from '../storages/notification-logger';
 import { dictItem } from './interfaces';
 
 class Notifications {
