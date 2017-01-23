@@ -1,13 +1,13 @@
 import BaseStorage from './base-storage';
-import { dictItemInterface } from './storage';
+import { dictItem } from '../scripts/interfaces';
 
 export interface FavoriteSetStorageItem {
     id: number;
     key: string;
-    list: dictItemInterface[];
+    list: dictItem[];
 }
 
-class FavoriteSetStorage extends BaseStorage<dictItemInterface> {
+class FavoriteSetStorage extends BaseStorage<dictItem> {
 
     constructor(public id: number) {
         super(`favorite-${id}`);

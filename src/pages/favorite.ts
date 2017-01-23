@@ -6,8 +6,9 @@ import Sheet from '../components/sheet';
 import { FavoriteStorageItem } from '../storages/favorite-storege';
 import FavoriteSetStorage from '../storages/favorite-set-storage';
 
+import { dictItem } from '../scripts/interfaces';
 import constants from '../scripts/constants';
-import storage, { dictItemInterface } from '../storages/storage';
+import storage from '../storages/storage';
 import helpers from '../scripts/helpers';
 
 const SET_ITEM_CLASS = 'favorite-set-item';
@@ -47,7 +48,7 @@ class FavoritePage extends Page {
         this[TARGETS.words].addEventListener('click', event => this.onCardClick(event));
     }
 
-    private onFindChange(dict: dictItemInterface, cached: boolean): void {
+    private onFindChange(dict: dictItem, cached: boolean): void {
         if (!storage.currentFavorite) return;
         if (!dict.data.length) return;
 
@@ -129,12 +130,12 @@ class FavoritePage extends Page {
         });
     }
 
-    private renderWords(promise: Promise<dictItemInterface[]> = null): void {
+    private renderWords(promise: Promise<dictItem[]> = null): void {
         if (!storage.currentFavorite) return;
 
         (promise || storage.currentFavorite.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list: dictItemInterface[] = storage.currentFavorite.getList();
+            const list: dictItem[] = storage.currentFavorite.getList();
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());

@@ -1,37 +1,19 @@
+import { dictItem } from '../scripts/interfaces';
+
 import FavoriteStorage from './favorite-storege';
 import FavoriteSetStorage from './favorite-set-storage';
 import HistoryStorage from './history-storage';
 
-export interface dictItemInterface {
-    id: string,
-    timestamp: number,
-    data: any[],
-}
-
-export interface dictDataInterface {
-    pos: string;
-    text: string;
-    tr: dictDataTrInterface[];
-    ts: string;
-}
-
-export interface dictDataTrInterface {
-    ex?: any[];
-    mean: any[];
-    pos: string;
-    syn?: any[];
-    text: string;
-}
-
 interface storageInterface {
-    currentDict: dictItemInterface,
+    currentDict: dictItem,
     currentFavorite: FavoriteSetStorage,
-    currentFavoriteDict: dictItemInterface,
+    currentFavoriteDict: dictItem,
     dictionary: any,
     notifications: any,
     favorite: FavoriteStorage,
     history: HistoryStorage,
 }
+
 
 const storage: storageInterface = {
     currentDict: null,

@@ -6,8 +6,9 @@ import Find from '../components/find';
 import Card from '../components/card';
 import Sheet from '../components/sheet';
 
+import { dictItem } from '../scripts/interfaces';
 import constants from '../scripts/constants';
-import storage, { dictItemInterface } from '../storages/storage';
+import storage from '../storages/storage';
 import helpers from '../scripts/helpers';
 
 const TARGETS = {
@@ -45,7 +46,7 @@ class DictPage extends Page {
         this[TARGETS.history].addEventListener('contextmenu', event => this.onHistoryContext(event));
     }
 
-    private onFindChange(dict: dictItemInterface, cached: boolean): void {
+    private onFindChange(dict: dictItem, cached: boolean): void {
         storage.currentDict = dict;
         this.renderSheet(dict.data);
 
@@ -89,10 +90,10 @@ class DictPage extends Page {
         helpers.replaceHtml(this[TARGETS.sheet], sheet.html, true);
     }
 
-    private renderHistory(promise: Promise<dictItemInterface[]> = null): void {
+    private renderHistory(promise: Promise<dictItem[]> = null): void {
         (promise || storage.history.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list: dictItemInterface[] = storage.history.getList().reverse();
+            const list: dictItem[] = storage.history.getList().reverse();
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());

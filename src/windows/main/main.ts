@@ -1,8 +1,9 @@
 import { remote, webFrame } from 'electron';
 
 // app modules
+import { dictItem } from '../../scripts/interfaces';
 import constants from '../../scripts/constants';
-import storage, { dictItemInterface } from '../../storages/storage';
+import storage from '../../storages/storage';
 import helpers from '../../scripts/helpers';
 
 import YaDictionary from '../../api/ya.dictionary';
@@ -83,7 +84,7 @@ class App {
         this.aSide.addEventListener('click', event => this.onAsideClick(event));
     }
 
-    private showDict(dict: dictItemInterface): void {
+    private showDict(dict: dictItem): void {
         storage.currentDict = dict;
         this.showPage(PAGES[0]); // TODO:
 

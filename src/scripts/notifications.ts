@@ -10,14 +10,14 @@ import storage from '../storages/storage';
 import helpers from './helpers';
 
 import NotificationLogger from '../storages/notification-storage';
-import { dictItemInterface } from '../storages/storage';
+import { dictItem } from './interfaces';
 
 class Notifications {
 
     private timer: any;
     private logger: NotificationLogger;
 
-    constructor(public onClick: (dict: dictItemInterface) => void) {
+    constructor(public onClick: (dict: dictItem) => void) {
         this.onClick = onClick || function () {};
         this.timer = 0;
         this.logger = new NotificationLogger();

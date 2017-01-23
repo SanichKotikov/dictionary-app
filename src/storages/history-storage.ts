@@ -1,7 +1,7 @@
 import BaseStorage from './base-storage';
-import { dictItemInterface } from './storage';
+import { dictItem } from '../scripts/interfaces';
 
-class HistoryStorage extends BaseStorage<dictItemInterface> {
+class HistoryStorage extends BaseStorage<dictItem> {
 
     // read() {
     //     return new Promise(resolve => {
@@ -19,7 +19,7 @@ class HistoryStorage extends BaseStorage<dictItemInterface> {
     //     });
     // }
 
-    getSortedCopyOfList(): dictItemInterface[] {
+    getSortedCopyOfList(): dictItem[] {
         return [...this.list].sort((a, b) => {
             if (a.id < b.id) return -1;
             if (a.id > b.id) return 1;

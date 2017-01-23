@@ -1,6 +1,7 @@
+import { dictItem } from '../../scripts/interfaces';
 import helpers from "../../scripts/helpers";
 import constants from '../../scripts/constants';
-import storage, { dictItemInterface } from '../../storages/storage';
+import storage from '../../storages/storage';
 
 import FavoriteStorage, { FavoriteStorageItem } from '../../storages/favorite-storege';
 import FavoriteSetStorage from '../../storages/favorite-set-storage';
@@ -12,7 +13,7 @@ import LearnCard from '../../components/learn-card';
 class App {
 
     private appEl: HTMLElement;
-    private words: dictItemInterface[];
+    private words: dictItem[];
     private card: LearnCard;
     private stat: any[];
 
@@ -33,12 +34,12 @@ class App {
         helpers.replaceHtml(this.appEl, learnStart.html, true);
     }
 
-    private extractWord(): dictItemInterface {
+    private extractWord(): dictItem {
         if (!this.words.length) return null;
 
         const index = helpers.getRandom(0, this.words.length);
-        const word: dictItemInterface = this.words[index];
-        this.words = this.words.filter((el: dictItemInterface) => el.id !== word.id);
+        const word: dictItem = this.words[index];
+        this.words = this.words.filter((el: dictItem) => el.id !== word.id);
 
         return word;
     }

@@ -3,7 +3,7 @@ import helpers from '../scripts/helpers';
 
 class Sheet {
 
-    public html: Element;
+    public html: HTMLElement;
 
     constructor(cards: any[] = []) {
         this.html = helpers.html('div', { 'class': 'sheet-item' });

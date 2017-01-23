@@ -1,11 +1,12 @@
+import { dictItem } from '../scripts/interfaces';
 import constants from '../scripts/constants';
-import storage, { dictItemInterface } from '../storages/storage';
+import storage from '../storages/storage';
 import helpers from '../scripts/helpers';
 
 const HINT_ITEM_CLASS = 'find-hint-item';
 
 
-function renderHints(items: dictItemInterface[]): DocumentFragment {
+function renderHints(items: dictItem[]): DocumentFragment {
     const html: DocumentFragment = document.createDocumentFragment();
 
     for (const item of items) {
@@ -23,7 +24,7 @@ class Find {
     input: HTMLInputElement;
     hints: HTMLElement;
 
-    constructor(public onChange: (dict: dictItemInterface, cached: boolean) => void,
+    constructor(public onChange: (dict: dictItem, cached: boolean) => void,
                 placeholder: string = 'Search') {
         const tpl = <HTMLTemplateElement>document.querySelector('template#find');
         this.html = <Element>document.importNode(tpl.content, true);
@@ -98,7 +99,7 @@ class Find {
         }
 
         storage.dictionary.get(value).then(json => {
-            const dict: dictItemInterface = { id: value, data: json.def || [], timestamp: now };
+            const dict: dictItem = { id: value, data: json.def || [], timestamp: now };
             this.onChange(dict, !!cache);
         });
     }
