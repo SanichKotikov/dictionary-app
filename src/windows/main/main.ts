@@ -1,10 +1,8 @@
-'use strict';
-
-const { remote, webFrame } = require('electron');
+import { remote, webFrame } from 'electron';
 
 // app modules
 import constants from '../../scripts/constants';
-import storage from '../../storages/storage';
+import storage, { dictItemInterface } from '../../storages/storage';
 import helpers from '../../scripts/helpers';
 
 import YaDictionary from '../../api/ya.dictionary';
@@ -15,28 +13,40 @@ import Notifications from '../../scripts/notifications';
 import DictPage from '../../pages/dictionary';
 import FavoritePage from '../../pages/favorite';
 
-const PAGES = [
+interface AppPage {
+    tplId: string;
+    title: string;
+    'class': any;
+}
+
+const PAGES: AppPage[] = [
     {
         tplId: 'dict-page',
         title: 'dictionary',
-        class: DictPage
+        'class': DictPage,
     },
     {
         tplId: 'favorite-page',
         title: 'favorite',
-        class: FavoritePage
+        'class': FavoritePage,
     },
 ];
 
+
 class App {
 
-    constructor(appId) {
+    private win: Electron.BrowserWindow;
+    private appEl: HTMLElement;
+    private aSide: HTMLElement;
+    private pageEl: HTMLElement;
+
+    constructor(appId: string = 'app') {
         this.win = remote.getCurrentWindow();
 
         // dom
-        this.appEl = document.getElementById(appId || 'app');
-        this.aSide = this.appEl.querySelector('#aside');
-        this.pageEl = this.appEl.querySelector('#page');
+        this.appEl = <HTMLElement>document.getElementById(appId);
+        this.aSide = <HTMLElement>this.appEl.querySelector('#aside');
+        this.pageEl = <HTMLElement>this.appEl.querySelector('#page');
 
         // storage
         storage.dictionary = new YaDictionary();
@@ -45,7 +55,7 @@ class App {
         storage.notifications = new Notifications(this.showDict.bind(this));
 
         // Disable pinch zoom
-        webFrame.setZoomLevelLimits(1, 1);
+        webFrame.setVisualZoomLevelLimits(1, 1);
 
         this.renderPagesButtons();
         this.bindHandlers();
@@ -54,7 +64,7 @@ class App {
         this.showPage(PAGES[0]);
     }
 
-    renderPagesButtons() {
+    private renderPagesButtons(): void {
         const html = document.createDocumentFragment();
 
         for (const page of PAGES) {
@@ -69,12 +79,11 @@ class App {
         helpers.replaceHtml(this.aSide, html);
     }
 
-    bindHandlers() {
+    private bindHandlers(): void {
         this.aSide.addEventListener('click', event => this.onAsideClick(event));
     }
 
-    showDict(dict) {
-        console.log('showDict');
+    private showDict(dict: dictItemInterface): void {
         storage.currentDict = dict;
         this.showPage(PAGES[0]); // TODO:
 
@@ -83,17 +92,17 @@ class App {
         }
     }
 
-    showPage(page) {
+    private showPage(page: AppPage): void {
         const inst = new page.class(page.tplId);
         helpers.replaceHtml(this.pageEl, inst.html);
     }
 
-    onAsideClick(event) {
-        const target = event.target;
+    private onAsideClick(event: Event): void {
+        const target = <HTMLElement>event.target;
         event.stopPropagation();
 
-        if (target.dataset && target.dataset.page) {
-            const page = PAGES.find(p => p.tplId === target.dataset.page);
+        if (target.dataset && target.dataset['page']) {
+            const page = PAGES.find(p => p.tplId === target.dataset['page']);
             this.showPage(page);
         }
     }
