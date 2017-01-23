@@ -1,39 +1,45 @@
-'use strict';
-
 import constants from '../scripts/constants';
 import storage from '../storages/storage';
 import helpers from '../scripts/helpers';
+import { dictItemInterface } from '../storages/storage';
 
 const HINT_ITEM_CLASS = 'find-hint-item';
 
-function renderHints(items) {
-    const html = document.createDocumentFragment();
+
+function renderHints(items: dictItemInterface[]): DocumentFragment {
+    const html: DocumentFragment = document.createDocumentFragment();
 
     for (const item of items) {
-        const props = { class: HINT_ITEM_CLASS, 'data-text': item.id };
+        const props = { 'class': HINT_ITEM_CLASS, 'data-text': item.id };
         html.appendChild(helpers.html('div', props, item.id));
     }
 
     return html;
 }
 
+
 class Find {
 
-    constructor(onChange, placeholder = 'Search') {
-        const tpl = document.querySelector('template#find');
-        this.html = document.importNode(tpl.content, true);
+    html: Element;
+    input: HTMLInputElement;
+    hints: HTMLElement;
 
-        this.input = this.html.querySelector('#find-input');
+    constructor(public onChange: (dict: dictItemInterface, cached: boolean) => void,
+                placeholder: string = 'Search') {
+        const tpl = <HTMLTemplateElement>document.querySelector('template#find');
+        this.html = <Element>document.importNode(tpl.content, true);
+
+        this.input = <HTMLInputElement>this.html.querySelector('#find-input');
         this.input.placeholder = placeholder;
-        this.hints = this.html.querySelector('#find-hints');
+        this.hints = <HTMLElement>this.html.querySelector('#find-hints');
 
         this.onChange = onChange || function() {};
 
         this.bindHandlers();
     }
 
-    bindHandlers() {
-        this.input.addEventListener('input', event => this.onInputChange(event));
+    private bindHandlers(): void {
+        this.input.addEventListener('input', event => this.onInputChange());
         this.hints.addEventListener('click', event => this.onHintClick(event));
 
         this.input.addEventListener('keyup', event => {
@@ -46,7 +52,7 @@ class Find {
         });
     }
 
-    onInputChange() {
+    private onInputChange(): void {
         const value = this.input.value;
 
         if (!value.length) {
@@ -67,20 +73,20 @@ class Find {
         this.hints.hidden = false;
     }
 
-    onHintClick(event) {
-        const target = event.target;
+    private onHintClick(event: Event): void {
+        const target = <HTMLElement>event.target;
 
         if (target.classList.contains(HINT_ITEM_CLASS)) {
             event.stopPropagation();
 
-            this.input.value = target.dataset.text;
+            this.input.value = target.dataset['text'];
             this.hints.hidden = true;
 
             this.onEnter();
         }
     }
 
-    onEnter() {
+    private onEnter(): void {
         const value = this.input.value;
         if (!value) return;
 
@@ -93,14 +99,14 @@ class Find {
         }
 
         storage.dictionary.get(value).then(json => {
-            const dict = { id: value, data: json.def || [], timestamp: now };
+            const dict: dictItemInterface = { id: value, data: json.def || [], timestamp: now };
             this.onChange(dict, !!cache);
         });
     }
 
-    updateText(text) {
+    public updateText(text: string): void {
         this.input.value = (text !== null && text !== undefined) ? text : storage.currentDict.id;
     }
 }
 
-module.exports = Find;
+export default Find;

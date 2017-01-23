@@ -19,7 +19,7 @@ class HistoryStorage extends BaseStorage<dictItemInterface> {
     //     });
     // }
 
-    getSortedCopyOfList() {
+    getSortedCopyOfList(): dictItemInterface[] {
         return [...this.list].sort((a, b) => {
             if (a.id < b.id) return -1;
             if (a.id > b.id) return 1;

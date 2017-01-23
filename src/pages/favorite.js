@@ -1,9 +1,9 @@
 'use strict';
 
 import Page from './page';
-const Find = require('../components/find');
+import Find from '../components/find';
 import Card from '../components/card';
-const Sheet = require('../components/sheet');
+import Sheet from '../components/sheet';
 
 import FavoriteSetStorage from '../storages/favorite-set-storage';
 
