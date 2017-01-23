@@ -1,3 +1,4 @@
+// DICT
 
 export interface dictItem {
     id: string,
@@ -35,4 +36,12 @@ export interface dictDataTrSynItem {
     asp?: string;
     pos: string;
     text: string;
+}
+
+
+// LEARN
+
+export interface learnAnswer {
+    correct: boolean;
+    dict: dictItem;
 }

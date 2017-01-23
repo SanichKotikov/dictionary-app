@@ -4,6 +4,7 @@
     font-size: 14px;
 }
 
+
 .learn-start {
     height: 100vh;
     padding: var(--padding);
@@ -19,6 +20,7 @@
 .favorite-item:nth-child(odd) {
     background-color: rgba(255, 255, 255, .04);
 }
+
 
 .learn-card {
     padding: calc(var(--padding) * 2);
@@ -40,4 +42,26 @@
 
 .learn-card .actions {
     margin: 10px 0;
+}
+
+
+.learn-stat {
+    display: flex;
+    height: 100vh;
+    padding: var(--padding);
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.learn-stat .result {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.learn-stat .wrong-cards {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }

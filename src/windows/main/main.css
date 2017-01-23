@@ -40,21 +40,6 @@
 }
 
 
-/* OTHER */
-
-.transcription {
-    display: inline-block;
-    color: #777;
-    font-weight: 400;
-    background: transparent;
-    cursor: default;
-}
-
-.position {
-    color: #70ab59;
-}
-
-
 /* FIND */
 
 .find {
@@ -124,63 +109,6 @@
     margin-top: var(--padding);
     overflow-x: hidden;
     overflow-y: scroll;
-}
-
-
-/* CARD */
-
-.card {
-    -webkit-user-select: text;
-}
-
-.card + .card {
-    padding-top: 10px;
-    border-top: 1px solid #555;
-}
-
-.card-title {
-    word-spacing: .2em;
-}
-
-.card-translations {
-    padding-left: 1.8em;
-    font-size: .8em;
-    line-height: 1.4;
-}
-
-.card-translation-item {
-    margin-bottom: .4em;
-}
-
-.card-translation-item--mean {
-    color: #b37c60;
-}
-
-.card-translation-item--ex {
-    padding-left: 0;
-    list-style: none;
-    color: #999;
-}
-
-
-/* TEASER CARD */
-
-.teaser-card {
-    margin-bottom: var(--half-padding);
-    line-height: 1.4;
-}
-
-.teaser-card-title {
-    pointer-events: none;
-}
-
-.teaser-card-translations {
-    color: #999;
-    font-size: .8em;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    pointer-events: none;
 }
 
 

@@ -1,5 +1,6 @@
 import constants from '../scripts/constants';
-import { dictItem } from '../scripts/interfaces';
+import { dictItem, learnAnswer } from '../scripts/interfaces';
+
 
 class LearnCard {
 
@@ -12,7 +13,7 @@ class LearnCard {
     private item: dictItem;
     private translations: string[];
 
-    constructor(private onNext: (any) => void) {
+    constructor(private onNext: (learnAnswer) => void) {
         const tpl = <HTMLTemplateElement>document.querySelector(`template#learn-card`);
         this.html = <HTMLElement>document.importNode(tpl.content, true);
 
@@ -36,12 +37,10 @@ class LearnCard {
 
     private onNextClick(): void {
         const answer: string = this.answerInput.value.replace(/ё/g, 'е');
-        console.log(answer);
-        console.log(this.translations);
 
         this.onNext({
-            id: this.item.id,
-            correct: !!~this.translations.indexOf(answer)
+            correct: !!~this.translations.indexOf(answer),
+            dict: this.item,
         });
     }
 
@@ -58,11 +57,10 @@ class LearnCard {
     }
 
     public setState(item: dictItem): void {
-        console.log(item);
-
         this.item = item;
         this.wordEl.textContent = item.id;
         this.answerInput.value = '';
+        setTimeout(() => this.answerInput.focus(), 300);
 
         this.getTranslations(item);
     }

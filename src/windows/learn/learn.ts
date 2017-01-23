@@ -1,4 +1,4 @@
-import { dictItem } from '../../scripts/interfaces';
+import { dictItem, learnAnswer } from '../../scripts/interfaces';
 import helpers from "../../scripts/helpers";
 import constants from '../../scripts/constants';
 import storage from '../../storages/storage';
@@ -8,6 +8,7 @@ import FavoriteSetStorage from '../../storages/favorite-set-storage';
 
 import LearnStart from '../../components/learn-start';
 import LearnCard from '../../components/learn-card';
+import LearnStat from '../../components/learn-stat';
 
 
 class App {
@@ -15,7 +16,7 @@ class App {
     private appEl: HTMLElement;
     private words: dictItem[];
     private card: LearnCard;
-    private stat: any[];
+    private stat: learnAnswer[];
 
     constructor() {
         this.appEl = document.getElementById('learn');
@@ -58,22 +59,20 @@ class App {
         });
     }
 
-    private nextCard(result: any): void {
+    private nextCard(result: learnAnswer): void {
         this.stat.push(result);
         const word = this.extractWord();
-        console.log(result);
 
         if (word !== null) {
             this.card.setState(word);
-            return;
+        } else {
+            this.showStat();
         }
+    }
 
-        this.appEl.innerHTML = '';
-
-        const correct = this.stat.filter(el => el.correct === true);
-        const incorrect = this.stat.filter(el => el.correct === false);
-
-        console.log(this.stat);
+    private showStat(): void {
+        const learnStat = new LearnStat(this.stat);
+        helpers.replaceHtml(this.appEl, learnStat.html, true);
     }
 }
 
