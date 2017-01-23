@@ -1,6 +1,4 @@
-'use strict';
-
-const { Menu, app } = require('electron');
+import { Menu, app } from 'electron';
 
 const viewSubMenu = [
     {
@@ -54,4 +52,4 @@ if (process.platform === 'darwin') {
     });
 }
 
-module.exports = Menu.buildFromTemplate(template);
+export default Menu.buildFromTemplate(template);

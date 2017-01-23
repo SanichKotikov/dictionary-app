@@ -1,8 +1,7 @@
-'use strict';
+import BaseStorage from './base-storage';
+import { dictItemInterface } from './storage';
 
-const BaseStorage = require('./base-storage');
-
-class HistoryStorage extends BaseStorage {
+class HistoryStorage extends BaseStorage<dictItemInterface> {
 
     // read() {
     //     return new Promise(resolve => {
@@ -29,4 +28,4 @@ class HistoryStorage extends BaseStorage {
     }
 }
 
-module.exports = HistoryStorage;
+export default HistoryStorage;

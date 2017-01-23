@@ -1,15 +1,15 @@
 'use strict';
 
-const Page = require('./page');
+import Page from './page';
 const Find = require('../components/find');
-const Card = require('../components/card');
+import Card from '../components/card';
 const Sheet = require('../components/sheet');
 
-const FavoriteSetStorage = require('../storages/favorite-set-storage');
+import FavoriteSetStorage from '../storages/favorite-set-storage';
 
-const constants = require('../scripts/constants');
-const storage = require('../storages/storage');
-const helpers = require('../scripts/helpers');
+import constants from '../scripts/constants';
+import storage from '../storages/storage';
+import helpers from '../scripts/helpers';
 
 const SET_ITEM_CLASS = 'favorite-set-item';
 

@@ -1,8 +1,8 @@
 'use strict';
 
-const constants = require('../scripts/constants');
-const storage = require('../storages/storage');
-const helpers = require('../scripts/helpers');
+import constants from '../scripts/constants';
+import storage from '../storages/storage';
+import helpers from '../scripts/helpers';
 
 const HINT_ITEM_CLASS = 'find-hint-item';
 

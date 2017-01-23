@@ -1,0 +1,43 @@
+
+.learn {
+    height: 100vh;
+    font-size: 14px;
+}
+
+.learn-start {
+    height: 100vh;
+    padding: var(--padding);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.favorite-item {
+    padding: 6px;
+    cursor: default;
+}
+
+.favorite-item:nth-child(odd) {
+    background-color: rgba(255, 255, 255, .04);
+}
+
+.learn-card {
+    padding: calc(var(--padding) * 2);
+    text-align: center;
+}
+
+.learn-card .word {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.learn-card .answer {
+    padding: 16px;
+    margin: 10px 0;
+    font-size: 16px;
+    text-align: inherit;
+    background-color: rgba(0, 0, 0, .1);
+}
+
+.learn-card .actions {
+    margin: 10px 0;
+}

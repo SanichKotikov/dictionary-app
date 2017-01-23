@@ -1,8 +1,12 @@
-'use strict';
+import BaseStorage from './base-storage';
 
-const BaseStorage = require('./base-storage');
+interface NotificationLoggerItem {
+    id: number;
+    times: number;
+    last: number;
+}
 
-class NotificationLogger extends BaseStorage {
+class NotificationLogger extends BaseStorage<NotificationLoggerItem> {
 
     constructor() {
         super('notification-logger');
@@ -17,4 +21,4 @@ class NotificationLogger extends BaseStorage {
     }
 }
 
-module.exports = NotificationLogger;
+export default NotificationLogger;

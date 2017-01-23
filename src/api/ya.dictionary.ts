@@ -1,9 +1,9 @@
-'use strict';
-
 const keys = require('../../keys');
 const apiUrl = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup';
 
 class YaDictionary {
+
+    private url: string;
 
     constructor() {
         if (!keys || !keys.yaDictionary) {
@@ -13,11 +13,11 @@ class YaDictionary {
         const apiKey = keys.yaDictionary;
         const lang = 'en-ru'; // default
 
-        this._url = `${apiUrl}?key=${apiKey}&lang=${lang}&text=`;
+        this.url = `${apiUrl}?key=${apiKey}&lang=${lang}&text=`;
     }
 
     get(text) {
-        const url = this._url + encodeURIComponent(text);
+        const url = this.url + encodeURIComponent(text);
 
         return fetch(url).then(response => {
             if (response.status === 200) {
@@ -29,4 +29,4 @@ class YaDictionary {
     }
 }
 
-module.exports = YaDictionary;
+export default YaDictionary;

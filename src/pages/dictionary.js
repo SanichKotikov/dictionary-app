@@ -3,14 +3,14 @@
 const { remote } = require('electron');
 const { Menu } = remote;
 
-const Page = require('./page');
+import Page from './page';
 const Find = require('../components/find');
-const Card = require('../components/card');
+import Card from '../components/card';
 const Sheet = require('../components/sheet');
 
-const constants = require('../scripts/constants');
-const storage = require('../storages/storage');
-const helpers = require('../scripts/helpers');
+import constants from '../scripts/constants';
+import storage from '../storages/storage';
+import helpers from '../scripts/helpers';
 
 const TARGETS = {
     header: 'dict-header',

@@ -1,40 +1,38 @@
-'use strict';
-
-const constants = require('../scripts/constants');
+import constants from '../scripts/constants';
+// import { dictItemInterface } from '../storages/storage';
 
 class Card {
 
-    constructor(dict, isTeaser = false) {
-        this.dict = dict;
-        this.isTeaser = isTeaser;
+    cardTpl: HTMLTemplateElement;
+    titleTpl: HTMLTemplateElement;
+    translateTpl: HTMLTemplateElement;
 
-        // templates
+    constructor(public dictData: any, public isTeaser: boolean = false) {
         const templateID = isTeaser ? 'template#teaser-card' : 'template#card';
 
-        this.cardTpl = document.querySelector(templateID);
-        this.titleTpl = document.querySelector('template#card-title');
-        this.translateTpl = document.querySelector('template#card-tr');
+        this.cardTpl = <HTMLTemplateElement>document.querySelector(templateID);
+        this.titleTpl = <HTMLTemplateElement>document.querySelector('template#card-title');
+        this.translateTpl = <HTMLTemplateElement>document.querySelector('template#card-tr');
     }
 
-    setTitle() {
-        const dict = this.dict;
-        const el = document.importNode(this.titleTpl.content, true);
+    setTitle(): Element {
+        const el = <Element>document.importNode(this.titleTpl.content, true);
         const spans = el.querySelectorAll('span');
 
-        spans[0].textContent = dict.text;
+        spans[0].textContent = this.dictData.text;
 
-        if (dict.ts) {
-            spans[1].textContent = `[${dict.ts}]`;
-            spans[1].dataset.text = dict.text;
+        if (this.dictData.ts) {
+            spans[1].textContent = `[${this.dictData.ts}]`;
+            spans[1].dataset['text'] = this.dictData.text;
         }
 
-        if (dict.pos) spans[2].textContent = dict.pos;
+        if (this.dictData.pos) spans[2].textContent = this.dictData.pos;
 
         return el;
     }
 
-    setTranslateItem(item) {
-        const li = document.importNode(this.translateTpl.content, true);
+    setTranslateItem(item): Element {
+        const li = <Element>document.importNode(this.translateTpl.content, true);
         const divs = li.querySelectorAll('div');
         const syn = item.syn || [];
 
@@ -61,13 +59,14 @@ class Card {
         return li;
     }
 
-    html() {
-        const dict = this.dict;
-        const html = document.importNode(this.cardTpl.content, true);
+    html(): Element {
+        const dict = this.dictData;
+        const html = <Element>document.importNode(this.cardTpl.content, true);
 
         if (this.isTeaser) {
             const divs = html.querySelectorAll(`.${constants.TEASER_CARD_CLASS} > div`);
-            html.querySelector(`.${constants.TEASER_CARD_CLASS}`).dataset.name = dict.id;
+            const teaserCard = <HTMLElement>html.querySelector(`.${constants.TEASER_CARD_CLASS}`);
+            teaserCard.dataset['name'] = dict.id;
 
             divs[0].innerHTML = `${dict.id} <span class="transcription">[${dict.data[0].ts}]<span>`;
             divs[1].textContent = dict.data.map(item => item.tr[0].text).join(', ');
@@ -89,4 +88,4 @@ class Card {
     }
 }
 
-module.exports = Card;
+export default Card;

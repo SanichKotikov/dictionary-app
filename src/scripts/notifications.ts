@@ -1,18 +1,23 @@
-'use strict';
+// TODO: https://github.com/Microsoft/TypeScript/issues/3111
+declare let Notification: any;
 
 // node modules
-const path = require('path');
+// import * as path from 'path';
 
 // app modules
-const constants = require('./constants');
-const storage = require('../storages/storage');
-const helpers = require('./helpers');
+import constants from '../scripts/constants';
+import storage from '../storages/storage';
+import helpers from './helpers';
 
-const NotificationLogger = require('../storages/notification-storage');
+import NotificationLogger from '../storages/notification-storage';
+import { dictItemInterface } from '../storages/storage';
 
 class Notifications {
 
-    constructor(onClick) {
+    private timer: any;
+    private logger: NotificationLogger;
+
+    constructor(public onClick: (dict: dictItemInterface) => void) {
         this.onClick = onClick || function () {};
         this.timer = 0;
         this.logger = new NotificationLogger();
@@ -20,7 +25,7 @@ class Notifications {
         this.run();
     }
 
-    run() {
+    run(): void {
         clearInterval(this.timer);
         let notification;
 
@@ -47,4 +52,4 @@ class Notifications {
     }
 }
 
-module.exports = Notifications;
+export default Notifications;

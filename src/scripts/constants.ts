@@ -1,5 +1,3 @@
-'use strict';
-
 const constants = {
     ENTER_KEY_CODE: 13,
     SHOW_DICT_EVENT: 'showDict',
@@ -10,4 +8,4 @@ const constants = {
     TIME_DAY: 1000 * 60 * 60 * 24
 };
 
-module.exports = constants;
+export default constants;

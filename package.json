@@ -10,14 +10,19 @@
     "url": "https://github.com/SanichKotikov/dictionary-app"
   },
   "scripts": {
-    "start": "electron .",
+    "start": "electron ./app",
+    "watch": "sh ./app.sh",
     "build": "electron-packager ./ --platform=darwin --arch=x64 --icon=./images/icon.icns --out=build --overwrite"
   },
   "devDependencies": {
+    "copy": "^0.3.0",
     "electron": "^1.4.14",
-    "electron-packager": "^8.5.0"
+    "electron-packager": "^8.5.0",
+    "typescript": "^2.1.5"
   },
   "dependencies": {
+    "@types/electron": "^1.4.31",
+    "@types/whatwg-fetch": "0.0.33",
     "electron-json-storage": "^2.1.1"
   }
 }

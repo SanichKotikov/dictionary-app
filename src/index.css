@@ -1,0 +1,102 @@
+/* VARIABLES */
+
+:root {
+    --color: #75a4bb;
+    --font-size: 16px;
+    --padding: 20px;
+    --half-padding: calc(var(--padding) / 2);
+    --aside-button-size: 50px;
+}
+
+
+/* MAIN */
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+*:focus {
+    outline: 0;
+}
+
+*[hidden] {
+    display: none !important;
+}
+
+::selection {
+    color: #222;
+    background: #c5f0ff;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    color: #eee;
+    font-family: system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Helvetica Neue',
+    Helvetica,
+    Arial,
+    sans-serif;
+    font-size: var(--font-size);
+    -webkit-font-smoothing: antialiased;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "pnum" 1, "kern" 1, "liga" 1;
+    background: #444;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+h1 {
+    margin: .4em 0 .8em;
+    font-size: 1.6em;
+    font-weight: 200;
+}
+
+input[type=text] {
+    width: 100%;
+    padding: calc(var(--half-padding) - 4px) var(--half-padding);
+    color: inherit;
+    font: inherit;
+    font-size: 1em;
+    font-weight: 200;
+    line-height: 1;
+    background: transparent;
+    border: 0;
+    transition: all;
+}
+
+input::-webkit-input-placeholder {
+    color: rgba(255, 255, 255, .3);
+}
+
+button {
+    padding: var(--half-padding) var(--padding);
+    border: 0;
+    font: inherit;
+    line-height: 1.9;
+    background: #555;
+    color: inherit;
+}
+
+button:active {
+    background: #494949;
+}
+
+button:disabled {
+    opacity: .2;
+}
+
+code {
+    white-space: pre-wrap;
+}

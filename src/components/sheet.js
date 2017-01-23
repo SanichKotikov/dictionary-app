@@ -1,7 +1,7 @@
 'use strict';
 
-const Card = require('./card');
-const helpers = require('../scripts/helpers');
+import Card from './card';
+import helpers from '../scripts/helpers';
 
 class Sheet {
 

@@ -1,12 +1,10 @@
-'use strict';
-
-// node modules
 const jsonStorage = require('electron-json-storage');
 
-class BaseStorage {
+class BaseStorage<T extends any> {
 
-    constructor(storageKey) {
-        this.key = storageKey;
+    public list: T[];
+
+    constructor(public key: string) {
         this.list = [];
 
         this.exist().then(res => {
@@ -15,7 +13,7 @@ class BaseStorage {
         });
     }
 
-    exist() {
+    exist(): Promise<boolean> {
         return new Promise(resolve => {
             jsonStorage.has(this.key, (error, hasKey) => {
                 if (error) throw error;
@@ -24,7 +22,7 @@ class BaseStorage {
         });
     }
 
-    read() {
+    read(): Promise<any> {
         return new Promise(resolve => {
             jsonStorage.get(this.key, (error, data) => {
                 if (error) throw error;
@@ -34,7 +32,7 @@ class BaseStorage {
         });
     }
 
-    save() {
+    save(): Promise<any> {
         return new Promise(resolve => {
             jsonStorage.set(this.key, this.list, error => {
                 if (error) throw error;
@@ -43,15 +41,15 @@ class BaseStorage {
         });
     }
 
-    has(id) {
+    has(id: string | number): boolean {
         return !!(this.get(id));
     }
 
-    get(id) {
+    get(id: string | number): T {
         return this.list.find(item => item.id === id);
     }
 
-    add(item) {
+    add(item: T): Promise<T[]> {
         return new Promise(resolve => {
             if (this.has(item.id)) {
                 resolve([...this.list]);
@@ -62,23 +60,23 @@ class BaseStorage {
         });
     }
 
-    update(item) {
+    update(item: T): Promise<T[]> {
         return new Promise(resolve => {
             this.list = this.list.map(cur => (cur.id === item.id) ? item : cur);
             this.save().then(() => resolve(this.list));
         });
     }
 
-    remove(id) {
+    remove(id: string | number): Promise<T[]> {
         return new Promise(resolve => {
             this.list = this.list.filter(item => item.id !== id);
             this.save().then(() => resolve([...this.list]));
         });
     }
 
-    getList() {
+    getList(): T[] {
         return [...this.list];
     }
 }
 
-module.exports = BaseStorage;
+export default BaseStorage;

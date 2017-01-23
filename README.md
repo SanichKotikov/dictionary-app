@@ -22,7 +22,11 @@ module.exports = {
 # install dependencies
 $ npm i
 
-# run
+# copy files & run ts watcher
+$ npm run watch
+
+# in separate tab
+# run electron
 $ npm start
 ```
 
