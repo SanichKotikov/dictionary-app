@@ -1,5 +1,5 @@
 import constants from '../scripts/constants';
-import { dictItem, learnAnswer } from '../scripts/interfaces';
+import { DictItem, learnAnswer } from '../scripts/interfaces';
 
 
 class LearnCard {
@@ -10,7 +10,7 @@ class LearnCard {
     private answerInput: HTMLInputElement;
     private nextButton: HTMLButtonElement;
 
-    private item: dictItem;
+    private item: DictItem;
     private translations: string[];
 
     constructor(private onNext: (learnAnswer) => void) {
@@ -45,7 +45,7 @@ class LearnCard {
     }
 
     // TODO:
-    private getTranslations(item: dictItem) {
+    private getTranslations(item: DictItem) {
         let translations: string[] = [];
 
         // TODO: add el.tr.syn[0].text
@@ -56,7 +56,7 @@ class LearnCard {
         this.translations = translations;
     }
 
-    public setState(item: dictItem): void {
+    public setState(item: DictItem): void {
         this.item = item;
         this.wordEl.textContent = item.id;
         this.answerInput.value = '';

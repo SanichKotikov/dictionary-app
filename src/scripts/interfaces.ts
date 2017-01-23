@@ -1,38 +1,47 @@
-// DICT
+// APP
 
-export interface dictItem {
-    id: string,
-    timestamp: number,
-    data: dictDataItem[],
+export interface PageOption {
+    tplId: string;
+    title: string;
+    constructor: any
 }
 
-export interface dictDataItem {
+
+// DICT
+
+export interface DictItem {
+    id: string,
+    timestamp: number,
+    data: DictDataItem[],
+}
+
+export interface DictDataItem {
     pos: string;
     text: string;
-    tr: dictDataTrItem[];
+    tr: DictDataTrItem[];
     ts: string;
 }
 
-export interface dictDataTrItem {
+export interface DictDataTrItem {
     gen?: string;
     asp?: string;
-    ex?: dictDataTrExItem[];
-    mean: dictDataTrMeanItem[];
+    ex?: DictDataTrExItem[];
+    mean: DictDataTrMeanItem[];
     pos: string;
-    syn?: dictDataTrSynItem[];
+    syn?: DictDataTrSynItem[];
     text: string;
 }
 
-export interface dictDataTrExItem {
+export interface DictDataTrExItem {
     text: string;
-    tr: dictDataTrMeanItem[]; // TODO:
+    tr: DictDataTrMeanItem[]; // TODO:
 }
 
-export interface dictDataTrMeanItem {
+export interface DictDataTrMeanItem {
     text: string;
 }
 
-export interface dictDataTrSynItem {
+export interface DictDataTrSynItem {
     asp?: string;
     pos: string;
     text: string;
@@ -43,5 +52,5 @@ export interface dictDataTrSynItem {
 
 export interface learnAnswer {
     correct: boolean;
-    dict: dictItem;
+    dict: DictItem;
 }

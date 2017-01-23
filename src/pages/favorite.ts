@@ -6,7 +6,7 @@ import Sheet from '../components/sheet';
 import { FavoriteStorageItem } from '../storages/favorite-storege';
 import FavoriteSetStorage from '../storages/favorite-set-storage';
 
-import { dictItem } from '../scripts/interfaces';
+import { DictItem } from '../scripts/interfaces';
 import constants from '../scripts/constants';
 import storage from '../storages/storage';
 import helpers from '../scripts/helpers';
@@ -48,7 +48,7 @@ class FavoritePage extends Page {
         this[TARGETS.words].addEventListener('click', event => this.onCardClick(event));
     }
 
-    private onFindChange(dict: dictItem, cached: boolean): void {
+    private onFindChange(dict: DictItem, cached: boolean): void {
         if (!storage.currentFavorite) return;
         if (!dict.data.length) return;
 
@@ -130,12 +130,12 @@ class FavoritePage extends Page {
         });
     }
 
-    private renderWords(promise: Promise<dictItem[]> = null): void {
+    private renderWords(promise: Promise<DictItem[]> = null): void {
         if (!storage.currentFavorite) return;
 
         (promise || storage.currentFavorite.read()).then(() => {
             const html = document.createDocumentFragment();
-            const list: dictItem[] = storage.currentFavorite.getList();
+            const list: DictItem[] = storage.currentFavorite.getList();
 
             for (const item of list) {
                 html.appendChild((new Card(item, true)).html());

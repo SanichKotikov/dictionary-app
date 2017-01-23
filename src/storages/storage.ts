@@ -1,13 +1,13 @@
-import { dictItem } from '../scripts/interfaces';
+import { DictItem } from '../scripts/interfaces';
 
 import FavoriteStorage from './favorite-storege';
 import FavoriteSetStorage from './favorite-set-storage';
 import HistoryStorage from './history-storage';
 
 interface storageInterface {
-    currentDict: dictItem,
+    currentDict: DictItem,
     currentFavorite: FavoriteSetStorage,
-    currentFavoriteDict: dictItem,
+    currentFavoriteDict: DictItem,
     dictionary: any,
     notifications: any,
     favorite: FavoriteStorage,

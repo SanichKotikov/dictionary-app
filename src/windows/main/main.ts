@@ -1,7 +1,6 @@
 import { remote, webFrame } from 'electron';
 
-// app modules
-import { dictItem } from '../../scripts/interfaces';
+import { PageOption, DictItem } from '../../scripts/interfaces';
 import constants from '../../scripts/constants';
 import storage from '../../storages/storage';
 import helpers from '../../scripts/helpers';
@@ -14,22 +13,16 @@ import Notifications from '../../scripts/notifications';
 import DictPage from '../../pages/dictionary';
 import FavoritePage from '../../pages/favorite';
 
-interface AppPage {
-    tplId: string;
-    title: string;
-    'class': any;
-}
-
-const PAGES: AppPage[] = [
+const PAGES: PageOption[] = [
     {
         tplId: 'dict-page',
         title: 'dictionary',
-        'class': DictPage,
+        constructor: DictPage,
     },
     {
         tplId: 'favorite-page',
         title: 'favorite',
-        'class': FavoritePage,
+        constructor: FavoritePage,
     },
 ];
 
@@ -84,7 +77,7 @@ class App {
         this.aSide.addEventListener('click', event => this.onAsideClick(event));
     }
 
-    private showDict(dict: dictItem): void {
+    private showDict(dict: DictItem): void {
         storage.currentDict = dict;
         this.showPage(PAGES[0]); // TODO:
 
@@ -93,8 +86,8 @@ class App {
         }
     }
 
-    private showPage(page: AppPage): void {
-        const inst = new page.class(page.tplId);
+    private showPage(page: PageOption): void {
+        const inst = new page.constructor(page.tplId);
         helpers.replaceHtml(this.pageEl, inst.html);
     }
 

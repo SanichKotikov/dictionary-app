@@ -1,4 +1,4 @@
-import { dictItem, learnAnswer } from '../../scripts/interfaces';
+import { DictItem, learnAnswer } from '../../scripts/interfaces';
 import helpers from "../../scripts/helpers";
 import constants from '../../scripts/constants';
 import storage from '../../storages/storage';
@@ -15,7 +15,7 @@ import LearnStat from '../../components/learn-stat';
 class App {
 
     private appEl: HTMLElement;
-    private words: dictItem[];
+    private words: DictItem[];
     private card: LearnCard;
     private stat: learnAnswer[];
     private learnLogger: LearnLogger;
@@ -38,12 +38,12 @@ class App {
         helpers.replaceHtml(this.appEl, learnStart.html, true);
     }
 
-    private extractWord(): dictItem {
+    private extractWord(): DictItem {
         if (!this.words.length) return null;
 
         const index = helpers.getRandom(0, this.words.length);
-        const word: dictItem = this.words[index];
-        this.words = this.words.filter((el: dictItem) => el.id !== word.id);
+        const word: DictItem = this.words[index];
+        this.words = this.words.filter((el: DictItem) => el.id !== word.id);
 
         return word;
     }
