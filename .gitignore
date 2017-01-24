@@ -1,4 +1,5 @@
 /app
+/dist
 /build
 /node_modules
 /keys.js
