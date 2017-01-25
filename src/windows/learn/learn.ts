@@ -28,7 +28,9 @@ class App {
         storage.favorite.read().then(() => this.renderStart());
         this.learnLogger = new LearnLogger();
 
+        this.renderStart = this.renderStart.bind(this);
         this.onSelectFavorite = this.onSelectFavorite.bind(this);
+        this.startLearn = this.startLearn.bind(this);
         this.nextCard = this.nextCard.bind(this);
     }
 
@@ -49,11 +51,15 @@ class App {
     }
 
     private onSelectFavorite(id: number): void {
-        const set = new FavoriteSetStorage(id);
+        storage.currentFavorite = new FavoriteSetStorage(id);
+        this.startLearn();
+    }
+
+    private startLearn(): void {
         this.stat = [];
 
-        set.read().then(() => {
-            this.words = set.getList();
+        storage.currentFavorite.read().then(() => {
+            this.words = storage.currentFavorite.getList();
             this.card = new LearnCard(this.nextCard);
             return helpers.replaceHtml(this.appEl, this.card.html, true);
         }).then(() => {
@@ -78,7 +84,7 @@ class App {
     }
 
     private showStat(): void {
-        const learnStat = new LearnStat(this.stat);
+        const learnStat = new LearnStat(this.stat, this.renderStart, this.startLearn);
         helpers.replaceHtml(this.appEl, learnStat.html, true);
     }
 }

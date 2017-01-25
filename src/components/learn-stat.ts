@@ -5,12 +5,24 @@ import Card from '../components/card';
 class LearnStat {
 
     public html: HTMLElement;
+    private newButton: HTMLButtonElement;
+    private repeatButton: HTMLButtonElement;
 
-    constructor(private stat: learnAnswer[]) {
+    constructor(private stat: learnAnswer[],
+                private onNewClick: () => void,
+                private onRepeat: () => void) {
         const tpl = <HTMLTemplateElement>document.querySelector('template#learn-stat');
         this.html = <HTMLElement>document.importNode(tpl.content, true);
+        this.newButton = <HTMLButtonElement>this.html.querySelector('button.new');
+        this.repeatButton = <HTMLButtonElement>this.html.querySelector('button.repeat');
 
         this.render();
+        this.bindEvents();
+    }
+
+    private bindEvents(): void {
+        this.newButton.addEventListener('click', event => this.onNewClick());
+        this.repeatButton.addEventListener('click', event => this.onRepeat());
     }
 
     private render(): void {

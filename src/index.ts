@@ -42,7 +42,7 @@ function createLearnWindow(): void {
 
     learnWin.loadURL(getWindowPath('learn'));
     learnWin.once('ready-to-show', () => learnWin.show());
-    learnWin.on('closed', event => learnWin = null);
+    learnWin.on('closed', () => learnWin = null);
     openDevTools(learnWin);
 }
 
